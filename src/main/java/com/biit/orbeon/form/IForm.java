@@ -14,4 +14,10 @@ public interface IForm {
 
 	List<IQuestion> getQuestions();
 
+	String getFormName();
+
+	String getApplicationName();
+	
+	String getId();
+
 }

@@ -40,7 +40,8 @@ public abstract class OrbeonImporter {
 	 */
 	public IForm readFormAnswers(String orbeonApplication, String orbeonFormName, String orbeonDocumentId)
 			throws MalformedURLException, DocumentException {
-		return readXml(getXml(orbeonApplication, orbeonFormName, orbeonDocumentId));
+		IForm form = createForm(orbeonApplication, orbeonFormName);
+		return readXml(getXml(orbeonApplication, orbeonFormName, orbeonDocumentId), form);
 	}
 
 	/**
@@ -62,7 +63,8 @@ public abstract class OrbeonImporter {
 	 */
 	public IForm readFormAnswers(String server, int port, String orbeonApplication, String orbeonFormName,
 			String orbeonDocumentId) throws MalformedURLException, DocumentException {
-		return readXml(getXml(server, port, orbeonApplication, orbeonFormName, orbeonDocumentId));
+		IForm form = createForm(orbeonApplication, orbeonFormName);
+		return readXml(getXml(server, port, orbeonApplication, orbeonFormName, orbeonDocumentId), form);
 	}
 
 	/**
@@ -120,12 +122,10 @@ public abstract class OrbeonImporter {
 	 * @throws DocumentException
 	 */
 	@SuppressWarnings("rawtypes")
-	public IForm readXml(String xmlText) throws DocumentException {
+	public IForm readXml(String xmlText, IForm form) throws DocumentException {
 		SAXReader xmlReader = new SAXReader();
 		final Document xmlResponse = xmlReader.read(new ByteArrayInputStream(xmlText.getBytes()));
 		final Element formElement = xmlResponse.getRootElement();
-
-		IForm form = createForm();
 
 		for (Iterator formIterator = formElement.elementIterator(); formIterator.hasNext();) {
 			final Element xmlCategory = (Element) formIterator.next();
@@ -172,7 +172,7 @@ public abstract class OrbeonImporter {
 		return questions;
 	}
 
-	public abstract IForm createForm();
+	public abstract IForm createForm(String applicationName, String formName);
 
 	public abstract ICategory createCategory(String tag);
 
