@@ -1,0 +1,17 @@
+.settings
+.project
+.classpath
+gen
+target
+bin
+project.properties
+output.log
+tmp
+*.zip
+*.xls#
+
+
+
+/dhszw-form-zrm/src/test/resources/META-INF
+/dhszw-form-zrm/src/test/resources/tables
+/dhszw-form-zrm/src/test/resources/rules

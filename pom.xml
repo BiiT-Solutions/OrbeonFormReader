@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+
+
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>com.biit.dhszw</groupId>
+	<artifactId>orbeon-form-reader</artifactId>
+	<packaging>jar</packaging>
+	<version>0.1.0</version>
+	<name>Orbeon Form Reader</name>
+
+	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<maven-compiler-plugin.version>3.1</maven-compiler-plugin.version>
+		<maven-antrun-plugin.version>1.7</maven-antrun-plugin.version>
+		<maven-surefire.version>2.14.1</maven-surefire.version>
+		<jaxen.version>1.1.6</jaxen.version>
+		<biit-common-utils.version>0.0.1</biit-common-utils.version>
+	</properties>
+
+	<distributionManagement>
+		<repository>
+			<id>central</id>
+			<name>biit-releases</name>
+			<url>http://ec2-54-217-214-241.eu-west-1.compute.amazonaws.com:8080/artifactory/ext-release-local</url>
+		</repository>
+	</distributionManagement>
+
+	<dependencies>
+		<!-- For reading XML -->
+		<dependency>
+			<groupId>dom4j</groupId>
+			<artifactId>dom4j</artifactId>
+			<version>1.6.1</version>
+		</dependency>
+		<dependency>
+			<groupId>jaxen</groupId>
+			<artifactId>jaxen</artifactId>
+			<version>${jaxen.version}</version>
+		</dependency>
+		<!-- File access -->
+		<dependency>
+			<groupId>com.biit</groupId>
+			<artifactId>common-utils</artifactId>
+			<version>${biit-common-utils.version}</version>
+		</dependency>
+	</dependencies>
+
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>${maven-compiler-plugin.version}</version>
+				<configuration>
+					<source>7</source>
+					<target>7</target>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
+
+</project>
