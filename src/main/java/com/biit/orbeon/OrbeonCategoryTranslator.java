@@ -129,6 +129,7 @@ public class OrbeonCategoryTranslator {
 	public HashMap<String, String> readXml(IForm form, String xmlText) throws DocumentException,
 			CategoryNameWithoutTranslation {
 		if (formTagsToName.get(form.getId()) != null) {
+			updateForm(form);
 			return formTagsToName.get(form.getId());
 		}
 
@@ -148,7 +149,7 @@ public class OrbeonCategoryTranslator {
 				tagsToName.put(node.getName(), label.getStringValue());
 			}
 		}
-
+		
 		formTagsToName.put(form.getId(), tagsToName);
 		updateForm(form);
 
