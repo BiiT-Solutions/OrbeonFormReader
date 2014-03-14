@@ -4,7 +4,7 @@ import java.util.List;
 
 import com.biit.orbeon.form.exceptions.CategoryDoesNotExistException;
 
-public interface IForm {
+public interface ISubmittedForm {
 
 	List<ICategory> getCategories();
 

@@ -15,7 +15,7 @@ import org.dom4j.io.SAXReader;
 import com.biit.orbeon.configuration.OrbeonConfigurationReader;
 import com.biit.orbeon.form.IAnswer;
 import com.biit.orbeon.form.ICategory;
-import com.biit.orbeon.form.IForm;
+import com.biit.orbeon.form.ISubmittedForm;
 import com.biit.orbeon.form.IQuestion;
 
 /**
@@ -38,10 +38,11 @@ public abstract class OrbeonImporter {
 	 * @throws MalformedURLException
 	 * @throws DocumentException
 	 */
-	public IForm readFormAnswers(String orbeonApplication, String orbeonFormName, String orbeonDocumentId)
+	public ISubmittedForm readFormAnswers(String orbeonApplication, String orbeonFormName, String orbeonDocumentId)
 			throws MalformedURLException, DocumentException {
-		IForm form = createForm(orbeonApplication, orbeonFormName);
-		return readXml(getXml(orbeonApplication, orbeonFormName, orbeonDocumentId), form);
+		ISubmittedForm form = createForm(orbeonApplication, orbeonFormName);
+		readXml(getXml(orbeonApplication, orbeonFormName, orbeonDocumentId), form);
+		return form;
 	}
 
 	/**
@@ -61,10 +62,11 @@ public abstract class OrbeonImporter {
 	 * @throws MalformedURLException
 	 * @throws DocumentException
 	 */
-	public IForm readFormAnswers(String server, int port, String orbeonApplication, String orbeonFormName,
+	public ISubmittedForm readFormAnswers(String server, int port, String orbeonApplication, String orbeonFormName,
 			String orbeonDocumentId) throws MalformedURLException, DocumentException {
-		IForm form = createForm(orbeonApplication, orbeonFormName);
-		return readXml(getXml(server, port, orbeonApplication, orbeonFormName, orbeonDocumentId), form);
+		ISubmittedForm form = createForm(orbeonApplication, orbeonFormName);
+		readXml(getXml(server, port, orbeonApplication, orbeonFormName, orbeonDocumentId), form);
+		return form;
 	}
 
 	/**
@@ -115,14 +117,14 @@ public abstract class OrbeonImporter {
 	}
 
 	/**
-	 * Transforms the XML of a orbeon forms submitted answers into a Form object.
+	 * Adds the user submitted answers into a Form object.
 	 * 
 	 * @param xmlText
 	 * @return
 	 * @throws DocumentException
 	 */
 	@SuppressWarnings("rawtypes")
-	public IForm readXml(String xmlText, IForm form) throws DocumentException {
+	public void readXml(String xmlText, ISubmittedForm form) throws DocumentException {
 		SAXReader xmlReader = new SAXReader();
 		final Document xmlResponse = xmlReader.read(new ByteArrayInputStream(xmlText.getBytes()));
 		final Element formElement = xmlResponse.getRootElement();
@@ -141,8 +143,6 @@ public abstract class OrbeonImporter {
 				}
 			}
 		}
-
-		return form;
 	}
 
 	@SuppressWarnings("rawtypes")
@@ -172,7 +172,7 @@ public abstract class OrbeonImporter {
 		return questions;
 	}
 
-	public abstract IForm createForm(String applicationName, String formName);
+	public abstract ISubmittedForm createForm(String applicationName, String formName);
 
 	public abstract ICategory createCategory(String tag);
 
