@@ -4,8 +4,8 @@
 
 
 	<modelVersion>4.0.0</modelVersion>
-	<groupId>com.biit.dhszw</groupId>
-	<artifactId>orbeon-form-reader</artifactId>
+	<groupId>com.biit.orbeon</groupId>
+	<artifactId>form-reader</artifactId>
 	<packaging>jar</packaging>
 	<version>0.1.1</version>
 	<name>Orbeon Form Reader</name>
