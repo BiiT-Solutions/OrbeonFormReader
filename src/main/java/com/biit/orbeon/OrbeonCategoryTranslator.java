@@ -47,7 +47,7 @@ public class OrbeonCategoryTranslator {
 	 */
 	public HashMap<String, String> readFormCategoryTranslations(ISubmittedForm form) throws MalformedURLException,
 			DocumentException, CategoryNameWithoutTranslation {
-		return readXml(form, getXml(form.getApplicationName(), form.getFormName()));
+		return translateXml(form, getXml(form.getApplicationName(), form.getFormName()));
 	}
 
 	/**
@@ -70,7 +70,7 @@ public class OrbeonCategoryTranslator {
 	 */
 	public HashMap<String, String> readFormCategoryTranslations(String server, int port, ISubmittedForm form)
 			throws MalformedURLException, DocumentException, CategoryNameWithoutTranslation {
-		return readXml(form, getXml(server, port, form.getApplicationName(), form.getFormName()));
+		return translateXml(form, getXml(server, port, form.getApplicationName(), form.getFormName()));
 	}
 
 	/**
@@ -134,7 +134,7 @@ public class OrbeonCategoryTranslator {
 	 * @throws CategoryNameWithoutTranslation
 	 */
 	@SuppressWarnings("unchecked")
-	private HashMap<String, String> readXml(ISubmittedForm form, String xmlText) throws DocumentException,
+	public HashMap<String, String> translateXml(ISubmittedForm form, String xmlText) throws DocumentException,
 			CategoryNameWithoutTranslation {
 		if (formTagsToName.get(form.getId()) != null) {
 			updateForm(form);
@@ -184,7 +184,7 @@ public class OrbeonCategoryTranslator {
 	 */
 	public HashMap<String, String> readXml(String server, int port, ISubmittedForm form) throws DocumentException,
 			MalformedURLException, CategoryNameWithoutTranslation {
-		return readXml(form, getXml(server, port, form.getApplicationName(), form.getFormName()));
+		return translateXml(form, getXml(server, port, form.getApplicationName(), form.getFormName()));
 	}
 
 	/**
@@ -203,7 +203,7 @@ public class OrbeonCategoryTranslator {
 	 */
 	public HashMap<String, String> readXml(ISubmittedForm form) throws DocumentException, MalformedURLException,
 			CategoryNameWithoutTranslation {
-		return readXml(form, getXml(form.getApplicationName(), form.getFormName()));
+		return translateXml(form, getXml(form.getApplicationName(), form.getFormName()));
 	}
 
 	public String getCategoryName(ISubmittedForm form, String categoryTag) throws CategoryNameWithoutTranslation {

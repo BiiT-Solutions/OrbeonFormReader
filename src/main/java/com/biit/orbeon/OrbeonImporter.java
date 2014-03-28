@@ -82,7 +82,7 @@ public abstract class OrbeonImporter {
 	 * @throws MalformedURLException
 	 * @throws DocumentException
 	 */
-	public String getXml(String orbeonApplication, String orbeonFormName, String orbeonDocumentId)
+	public static String getXml(String orbeonApplication, String orbeonFormName, String orbeonDocumentId)
 			throws MalformedURLException, DocumentException {
 		return getXml(OrbeonConfigurationReader.getInstance().getOrbeonServer(), OrbeonConfigurationReader
 				.getInstance().getOrbeonPort(), orbeonApplication, orbeonFormName, orbeonDocumentId);
@@ -103,7 +103,7 @@ public abstract class OrbeonImporter {
 	 * @throws MalformedURLException
 	 * @throws DocumentException
 	 */
-	public String getXml(String server, int port, String orbeonApplication, String orbeonFormName,
+	public static String getXml(String server, int port, String orbeonApplication, String orbeonFormName,
 			String orbeonDocumentId) throws MalformedURLException, DocumentException {
 		String xmlURL = "http://" + server + ":" + port + "/orbeon/fr/service/persistence/crud/" + orbeonApplication
 				+ "/" + orbeonFormName + "/data/" + orbeonDocumentId + "/data.xml";
