@@ -62,10 +62,10 @@ public abstract class OrbeonImporter {
 	 * @throws MalformedURLException
 	 * @throws DocumentException
 	 */
-	public ISubmittedForm readFormAnswers(String server, int port, String orbeonApplication, String orbeonFormName,
-			String orbeonDocumentId) throws MalformedURLException, DocumentException {
+	public ISubmittedForm readFormAnswers(String protocol, String server, int port, String orbeonApplication,
+			String orbeonFormName, String orbeonDocumentId) throws MalformedURLException, DocumentException {
 		ISubmittedForm form = createForm(orbeonApplication, orbeonFormName);
-		readXml(getXml(server, port, orbeonApplication, orbeonFormName, orbeonDocumentId), form);
+		readXml(getXml(protocol, server, port, orbeonApplication, orbeonFormName, orbeonDocumentId), form);
 		return form;
 	}
 
@@ -84,8 +84,9 @@ public abstract class OrbeonImporter {
 	 */
 	public static String getXml(String orbeonApplication, String orbeonFormName, String orbeonDocumentId)
 			throws MalformedURLException, DocumentException {
-		return getXml(OrbeonConfigurationReader.getInstance().getOrbeonServer(), OrbeonConfigurationReader
-				.getInstance().getOrbeonPort(), orbeonApplication, orbeonFormName, orbeonDocumentId);
+		return getXml(OrbeonConfigurationReader.getInstance().getOrbeonProtocol(), OrbeonConfigurationReader
+				.getInstance().getOrbeonServer(), OrbeonConfigurationReader.getInstance().getOrbeonPort(),
+				orbeonApplication, orbeonFormName, orbeonDocumentId);
 	}
 
 	/**
@@ -103,10 +104,10 @@ public abstract class OrbeonImporter {
 	 * @throws MalformedURLException
 	 * @throws DocumentException
 	 */
-	public static String getXml(String server, int port, String orbeonApplication, String orbeonFormName,
-			String orbeonDocumentId) throws MalformedURLException, DocumentException {
-		String xmlURL = "http://" + server + ":" + port + "/orbeon/fr/service/persistence/crud/" + orbeonApplication
-				+ "/" + orbeonFormName + "/data/" + orbeonDocumentId + "/data.xml";
+	public static String getXml(String protocol, String server, int port, String orbeonApplication,
+			String orbeonFormName, String orbeonDocumentId) throws MalformedURLException, DocumentException {
+		String xmlURL = protocol + "://" + server + ":" + port + "/orbeon/fr/service/persistence/crud/"
+				+ orbeonApplication + "/" + orbeonFormName + "/data/" + orbeonDocumentId + "/data.xml";
 		SAXReader xmlReader = new SAXReader();
 
 		final Document xmlResponse = xmlReader.read(new URL(xmlURL));

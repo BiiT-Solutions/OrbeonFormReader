@@ -68,9 +68,9 @@ public class OrbeonCategoryTranslator {
 	 * @throws DocumentException
 	 * @throws CategoryNameWithoutTranslation
 	 */
-	public HashMap<String, String> readFormCategoryTranslations(String server, int port, ISubmittedForm form)
-			throws MalformedURLException, DocumentException, CategoryNameWithoutTranslation {
-		return translateXml(form, getXml(server, port, form.getApplicationName(), form.getFormName()));
+	public HashMap<String, String> readFormCategoryTranslations(String protocol, String server, int port,
+			ISubmittedForm form) throws MalformedURLException, DocumentException, CategoryNameWithoutTranslation {
+		return translateXml(form, getXml(protocol, server, port, form.getApplicationName(), form.getFormName()));
 	}
 
 	/**
@@ -88,8 +88,9 @@ public class OrbeonCategoryTranslator {
 	 */
 	public String getXml(String orbeonApplication, String orbeonFormName) throws MalformedURLException,
 			DocumentException {
-		return getXml(OrbeonConfigurationReader.getInstance().getOrbeonServer(), OrbeonConfigurationReader
-				.getInstance().getOrbeonPort(), orbeonApplication, orbeonFormName);
+		return getXml(OrbeonConfigurationReader.getInstance().getOrbeonProtocol(), OrbeonConfigurationReader
+				.getInstance().getOrbeonServer(), OrbeonConfigurationReader.getInstance().getOrbeonPort(),
+				orbeonApplication, orbeonFormName);
 	}
 
 	/**
@@ -105,15 +106,15 @@ public class OrbeonCategoryTranslator {
 	 * @throws MalformedURLException
 	 * @throws DocumentException
 	 */
-	public String getXml(String server, int port, String orbeonApplication, String orbeonFormName)
+	public String getXml(String protocol, String server, int port, String orbeonApplication, String orbeonFormName)
 			throws MalformedURLException, DocumentException {
 
 		if (formsXml.get(getId(orbeonApplication, orbeonFormName)) != null) {
 			return formsXml.get(getId(orbeonApplication, orbeonFormName));
 		}
 
-		String xmlURL = "http://" + server + ":" + port + "/orbeon/fr/service/persistence/crud/" + orbeonApplication
-				+ "/" + orbeonFormName + "/form/form.xhtml";
+		String xmlURL = protocol + "://" + server + ":" + port + "/orbeon/fr/service/persistence/crud/"
+				+ orbeonApplication + "/" + orbeonFormName + "/form/form.xhtml";
 		SAXReader xmlReader = new SAXReader();
 
 		final Document xmlResponse = xmlReader.read(new URL(xmlURL));
@@ -182,9 +183,9 @@ public class OrbeonCategoryTranslator {
 	 * @throws MalformedURLException
 	 * @throws CategoryNameWithoutTranslation
 	 */
-	public HashMap<String, String> readXml(String server, int port, ISubmittedForm form) throws DocumentException,
-			MalformedURLException, CategoryNameWithoutTranslation {
-		return translateXml(form, getXml(server, port, form.getApplicationName(), form.getFormName()));
+	public HashMap<String, String> readXml(String protocol, String server, int port, ISubmittedForm form)
+			throws DocumentException, MalformedURLException, CategoryNameWithoutTranslation {
+		return translateXml(form, getXml(protocol, server, port, form.getApplicationName(), form.getFormName()));
 	}
 
 	/**
