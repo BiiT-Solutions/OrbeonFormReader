@@ -158,7 +158,12 @@ public abstract class OrbeonImporter {
 			prefix = prefix + ".";
 		}
 		if (xmlQuestion.getName().startsWith(GROUP_PREFIX)) {
+			// Remove 'group-' prefix and '-1' sufix of groups.
 			String groupPrefix = prefix + xmlQuestion.getName().replace(GROUP_PREFIX, "");
+			int sufixStartsAt = groupPrefix.lastIndexOf('-');
+			if (sufixStartsAt > 0) {
+				groupPrefix = groupPrefix.substring(0, sufixStartsAt);
+			}
 			for (Iterator groupIterator = xmlQuestion.elementIterator(); groupIterator.hasNext();) {
 				final Element xmlQuestionInGroup = (Element) groupIterator.next();
 				// Look up for nested groups.

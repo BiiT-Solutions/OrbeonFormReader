@@ -15,7 +15,7 @@ public class OrbeonConfigurationReader {
 
 	private final String DEFAULT_ORBEON_SERVER = "localhost";
 	private final int DEFAULT_ORBEON_PORT = 8080;
-	private final String DEFAULT_ORBEON_PROTOCOL = "https";
+	private final String DEFAULT_ORBEON_PROTOCOL = "http";
 
 	private String orbeonServer;
 	private Integer orbeonPort;
