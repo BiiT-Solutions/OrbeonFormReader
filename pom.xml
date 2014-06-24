@@ -23,7 +23,7 @@
 		<repository>
 			<id>central</id>
 			<name>biit-releases</name>
-			<url>http://ec2-54-217-214-241.eu-west-1.compute.amazonaws.com:8080/artifactory/ext-release-local</url>
+			<url>https://dev.biit-solutions.com:8443/mavenartifactory/ext-release-local</url>
 		</repository>
 	</distributionManagement>
 
