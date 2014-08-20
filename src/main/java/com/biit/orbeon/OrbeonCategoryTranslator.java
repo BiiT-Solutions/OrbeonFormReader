@@ -130,14 +130,35 @@ public class OrbeonCategoryTranslator {
 	/**
 	 * Create a relationship between category tags and its names.
 	 * 
+	 * @param form
+	 *            form object to be filled up.
 	 * @param xmlText
+	 *            with the form information. Assumed in UTF-8.
+	 * @return
+	 * @throws DocumentException
+	 * @throws CategoryNameWithoutTranslation
+	 */
+	public HashMap<String, String> translateXml(ISubmittedForm form, String xmlText) throws DocumentException,
+			CategoryNameWithoutTranslation {
+		return translateXml(form, xmlText, Charset.forName("UTF-8"));
+	}
+
+	/**
+	 * Create a relationship between category tags and its names.
+	 * 
+	 * @param form
+	 *            form object to be filled up.
+	 * @param xmlText
+	 *            with the form information.
+	 * @param encoding
+	 *            codification of xmlText.
 	 * @return
 	 * @throws DocumentException
 	 * @throws CategoryNameWithoutTranslation
 	 */
 	@SuppressWarnings("unchecked")
-	public HashMap<String, String> translateXml(ISubmittedForm form, String xmlText) throws DocumentException,
-			CategoryNameWithoutTranslation {
+	public HashMap<String, String> translateXml(ISubmittedForm form, String xmlText, Charset encoding)
+			throws DocumentException, CategoryNameWithoutTranslation {
 		if (formTagsToName.get(form.getId()) != null) {
 			updateForm(form);
 			return formTagsToName.get(form.getId());
@@ -145,9 +166,10 @@ public class OrbeonCategoryTranslator {
 
 		HashMap<String, String> tagsToName = new HashMap<String, String>();
 		SAXReader xmlReader = new SAXReader();
-		byte[] xmlBytes = xmlText.getBytes(Charset.defaultCharset());
+		byte[] xmlBytes = xmlText.getBytes(encoding); // Charset.forName("UTF-8")
 		ByteArrayInputStream arrayInputStream = new ByteArrayInputStream(xmlBytes);
 		final Document xmlResponse = xmlReader.read(arrayInputStream);
+		// final Document xmlResponse = xmlReader.read(new ByteArrayInputStream(xmlText.getBytes()));
 		final Node formElement = xmlResponse.getRootElement();
 		// Categories resource has de id "fr-form-resources".
 		Node resourcesSection = formElement.selectSingleNode("//xf:instance[@id='fr-form-resources']");
@@ -209,7 +231,7 @@ public class OrbeonCategoryTranslator {
 			CategoryNameWithoutTranslation {
 		return translateXml(form, getXml(form.getApplicationName(), form.getFormName()));
 	}
-	
+
 	/**
 	 * Create a relationship between category tags and its names.
 	 * 
