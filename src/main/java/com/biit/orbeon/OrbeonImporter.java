@@ -13,10 +13,9 @@ import org.dom4j.Element;
 import org.dom4j.io.SAXReader;
 
 import com.biit.orbeon.configuration.OrbeonConfigurationReader;
-import com.biit.orbeon.form.IAnswer;
 import com.biit.orbeon.form.ICategory;
-import com.biit.orbeon.form.ISubmittedForm;
 import com.biit.orbeon.form.IQuestion;
+import com.biit.orbeon.form.ISubmittedForm;
 
 /**
  * Reads data from Orbeon Form.
@@ -42,6 +41,23 @@ public abstract class OrbeonImporter {
 			throws MalformedURLException, DocumentException {
 		ISubmittedForm form = createForm(orbeonApplication, orbeonFormName);
 		readXml(getXml(orbeonApplication, orbeonFormName, orbeonDocumentId), form);
+		return form;
+	}
+
+	/**
+	 * Read the form answers of a orbeon form.
+	 * 
+	 * @param form
+	 *            The form.
+	 * @param orbeonDocumentId
+	 *            The document ID of the submitted answers.
+	 * @return a form with all user answers.
+	 * @throws MalformedURLException
+	 * @throws DocumentException
+	 */
+	public ISubmittedForm readFormAnswers(ISubmittedForm form, String orbeonDocumentId) throws MalformedURLException,
+			DocumentException {
+		readXml(getXml(form.getApplicationName(), form.getFormName(), orbeonDocumentId), form);
 		return form;
 	}
 
@@ -172,7 +188,8 @@ public abstract class OrbeonImporter {
 		} else {
 			// It is not in a group.
 			IQuestion question = createQuestion(category, prefix + xmlQuestion.getName());
-			question.setAnswer(createAnswer(question, xmlQuestion.getText()));
+			// The value is always going to be a String class
+			question.setAnswer(xmlQuestion.getText());
 			questions.add(question);
 		}
 		return questions;
@@ -183,7 +200,4 @@ public abstract class OrbeonImporter {
 	public abstract ICategory createCategory(String tag);
 
 	public abstract IQuestion createQuestion(ICategory category, String tag);
-
-	public abstract IAnswer createAnswer(IQuestion question, String value);
-
 }

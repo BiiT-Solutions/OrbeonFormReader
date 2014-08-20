@@ -3,6 +3,7 @@ package com.biit.orbeon;
 import java.io.ByteArrayInputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.nio.charset.Charset;
 import java.util.HashMap;
 import java.util.List;
 
@@ -144,7 +145,9 @@ public class OrbeonCategoryTranslator {
 
 		HashMap<String, String> tagsToName = new HashMap<String, String>();
 		SAXReader xmlReader = new SAXReader();
-		final Document xmlResponse = xmlReader.read(new ByteArrayInputStream(xmlText.getBytes()));
+		byte[] xmlBytes = xmlText.getBytes(Charset.defaultCharset());
+		ByteArrayInputStream arrayInputStream = new ByteArrayInputStream(xmlBytes);
+		final Document xmlResponse = xmlReader.read(arrayInputStream);
 		final Node formElement = xmlResponse.getRootElement();
 		// Categories resource has de id "fr-form-resources".
 		Node resourcesSection = formElement.selectSingleNode("//xf:instance[@id='fr-form-resources']");
@@ -205,6 +208,20 @@ public class OrbeonCategoryTranslator {
 	public HashMap<String, String> readXml(ISubmittedForm form) throws DocumentException, MalformedURLException,
 			CategoryNameWithoutTranslation {
 		return translateXml(form, getXml(form.getApplicationName(), form.getFormName()));
+	}
+	
+	/**
+	 * Create a relationship between category tags and its names.
+	 * 
+	 * @param form
+	 * @return
+	 * @throws DocumentException
+	 * @throws MalformedURLException
+	 * @throws CategoryNameWithoutTranslation
+	 */
+	public HashMap<String, String> readXml(ISubmittedForm form, String formStructure) throws DocumentException,
+			MalformedURLException, CategoryNameWithoutTranslation {
+		return translateXml(form, formStructure);
 	}
 
 	public String getCategoryName(ISubmittedForm form, String categoryTag) throws CategoryNameWithoutTranslation {

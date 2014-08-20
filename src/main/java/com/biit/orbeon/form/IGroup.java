@@ -2,21 +2,13 @@ package com.biit.orbeon.form;
 
 import java.util.List;
 
-import com.biit.orbeon.form.exceptions.GroupDoesNotExistException;
 import com.biit.orbeon.form.exceptions.QuestionDoesNotExistException;
 
-public interface ICategory extends ICommonAttributes {
+public interface IGroup extends ICommonAttributes{
 
 	void addQuestions(List<IQuestion> questions);
 
 	List<IQuestion> getQuestions();
 
 	IQuestion getQuestion(String questionTag) throws QuestionDoesNotExistException;
-
-	void addGroups(List<IGroup> groups);
-
-	List<IGroup> getGroups();
-
-	IGroup getGroup(String tag) throws GroupDoesNotExistException;
-
 }

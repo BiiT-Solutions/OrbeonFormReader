@@ -3,7 +3,6 @@ package com.biit.orbeon.form;
 import java.util.List;
 
 import com.biit.orbeon.form.exceptions.CategoryDoesNotExistException;
-import com.biit.orbeon.form.exceptions.QuestionDoesNotExistException;
 
 public interface ISubmittedForm {
 
@@ -20,21 +19,10 @@ public interface ISubmittedForm {
 	 */
 	ICategory getCategory(String categoryText) throws CategoryDoesNotExistException;
 
-	List<IQuestion> getQuestions();
-
 	String getFormName();
 
 	String getApplicationName();
 
 	String getId();
-
-	/**
-	 * Gets a Question object from its tag. If more than one question has the same text, returns the first one.
-	 * 
-	 * @param questionTag
-	 * @return
-	 * @throws QuestionDoesNotExistException
-	 */
-	IQuestion getQuestion(String questionTag) throws QuestionDoesNotExistException;
 
 }

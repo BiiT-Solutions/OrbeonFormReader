@@ -1,13 +1,9 @@
 package com.biit.orbeon.form;
 
-public interface IQuestion {
+public interface IQuestion extends ICommonAttributes {
 
-	void setAnswer(IAnswer createAnswer);
+	public void setAnswer(String value);
 
-	IAnswer getAnswer();
-
-	String getTag();
-
-	void setTag(String tag);
+	public Object getAnswer();
 
 }
