@@ -4,6 +4,7 @@ import java.io.ByteArrayInputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.List;
 
@@ -140,7 +141,7 @@ public class OrbeonCategoryTranslator {
 	 */
 	public HashMap<String, String> translateXml(ISubmittedForm form, String xmlText) throws DocumentException,
 			CategoryNameWithoutTranslation {
-		return translateXml(form, xmlText, Charset.forName("UTF-8"));
+		return translateXml(form, xmlText, StandardCharsets.UTF_8);
 	}
 
 	/**
