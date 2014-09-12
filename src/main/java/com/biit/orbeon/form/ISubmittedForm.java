@@ -3,6 +3,7 @@ package com.biit.orbeon.form;
 import java.util.List;
 
 import com.biit.orbeon.form.exceptions.CategoryDoesNotExistException;
+import com.biit.orbeon.form.exceptions.QuestionDoesNotExistException;
 
 public interface ISubmittedForm {
 
@@ -24,5 +25,10 @@ public interface ISubmittedForm {
 	String getApplicationName();
 
 	String getId();
+
+	ISubmittedForm getSubmittedForm();
+
+	IQuestion getQuestion(String categoryName, String questionName) throws QuestionDoesNotExistException,
+			CategoryDoesNotExistException;
 
 }
