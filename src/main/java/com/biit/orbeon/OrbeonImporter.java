@@ -15,6 +15,7 @@ import com.biit.orbeon.form.ICategory;
 import com.biit.orbeon.form.IGroup;
 import com.biit.orbeon.form.IQuestion;
 import com.biit.orbeon.form.ISubmittedForm;
+import com.biit.orbeon.form.exceptions.GroupDoesNotExistException;
 
 /**
  * Reads data from Orbeon Form.
@@ -25,7 +26,7 @@ public abstract class OrbeonImporter {
 
 	/**
 	 * Read the form answers of a orbeon form.
-	 *
+	 * 
 	 * @param orbeonApplication
 	 *            The application name of the form.
 	 * @param orbeonFormName
@@ -45,7 +46,7 @@ public abstract class OrbeonImporter {
 
 	/**
 	 * Read the form answers of a orbeon form.
-	 *
+	 * 
 	 * @param form
 	 *            The form.
 	 * @param orbeonDocumentId
@@ -62,7 +63,7 @@ public abstract class OrbeonImporter {
 
 	/**
 	 * Read the form answers of a orbeon form.
-	 *
+	 * 
 	 * @param server
 	 *            The IP of the server that hosts the orbeon web application.
 	 * @param port
@@ -86,7 +87,7 @@ public abstract class OrbeonImporter {
 
 	/**
 	 * Gets the XML of a orbeon application.
-	 *
+	 * 
 	 * @param orbeonApplication
 	 *            The application name of the form.
 	 * @param orbeonFormName
@@ -106,7 +107,7 @@ public abstract class OrbeonImporter {
 
 	/**
 	 * Gets the XML of a orbeon application.
-	 *
+	 * 
 	 * @server orbeon server IP.
 	 * @port orbeon server port.
 	 * @param orbeonApplication
@@ -134,7 +135,7 @@ public abstract class OrbeonImporter {
 
 	/**
 	 * Adds the user submitted answers into a Form object.
-	 *
+	 * 
 	 * @param xmlText
 	 * @return
 	 * @throws DocumentException
@@ -170,28 +171,42 @@ public abstract class OrbeonImporter {
 		if (xmlQuestion.getName().startsWith(SUBCATEGORY_PREFIX)) {
 			return;
 		}
-//		if (prefix.length() > 0) {
-//			prefix = prefix + ".";
-//			System.out.println("GROUP PREFIX: " + prefix);
-//		}
-
 		// Analyzing group
 		if (xmlQuestion.getName().startsWith(GROUP_PREFIX)) {
 			// Remove 'group-' prefix and '-1' sufix of groups.
 			String groupPrefix = xmlQuestion.getName().replace(GROUP_PREFIX, "");
+			int sufixStartsAt = groupPrefix.lastIndexOf('-');
+			if (sufixStartsAt > 0) {
+				groupPrefix = groupPrefix.substring(0, sufixStartsAt);
+			}
 			// Subgroups
 			if (group != null) {
-//				System.out.println("GROUP: " + groupPrefix + " in GROUP: " + group.getTag() + " CREATED.");
 				// Create a group children of a previous group
-				IGroup subgroup = createGroup(group, groupPrefix);
-				group.addGroup(subgroup);
+				IGroup subgroup = null;
+				try {
+					subgroup = group.getGroup(groupPrefix);
+				} catch (GroupDoesNotExistException e) {
+					// Add the group to the parent group
+					subgroup = createGroup(group, groupPrefix);
+					group.addGroup(subgroup);
+					// System.out.println("GROUP: " + groupPrefix +
+					// " in GROUP: " + group.getTag() + " CREATED.");
+				}
 				// The new active group is the group created
-				group = subgroup;
+				if (subgroup != null) {
+					group = subgroup;
+				}
 			} else {
-//				System.out.println("GROUP: " + groupPrefix + " in CATEGORY: " + category.getTag() + " CREATED.");
 				// Create group under category
-				group = createGroup(category, groupPrefix);
-				category.addGroup(group);
+				try {
+					group = category.getGroup(groupPrefix);
+				} catch (GroupDoesNotExistException e) {
+					// Add the group to the category
+					group = createGroup(category, groupPrefix);
+					category.addGroup(group);
+					// System.out.println("GROUP: " + groupPrefix +
+					// " in CATEGORY: " + category.getTag() + " CREATED.");
+				}
 			}
 			for (Iterator groupIterator = xmlQuestion.elementIterator(); groupIterator.hasNext();) {
 				final Element xmlQuestionInGroup = (Element) groupIterator.next();
@@ -201,8 +216,9 @@ public abstract class OrbeonImporter {
 		} else {
 			IQuestion question = null;
 			if (group == null) {
-//				System.out.println("QUESTION: " + prefix + xmlQuestion.getName() + " in CATEGORY: " + category.getTag()
-//						+ " CREATED.");
+				// System.out.println("QUESTION: " + prefix +
+				// xmlQuestion.getName() + " in CATEGORY: " + category.getTag()
+				// + " CREATED.");
 				// It is not in a group.
 				question = createQuestion(category, xmlQuestion.getName());
 				// The value is always going to be a String class
@@ -211,8 +227,9 @@ public abstract class OrbeonImporter {
 			}
 			// Question belongs to a group
 			else {
-//				System.out.println("QUESTION: " + prefix + xmlQuestion.getName() + " in GROUP: " + group.getTag()
-//						+ " CREATED.");
+				// System.out.println("QUESTION: " + prefix +
+				// xmlQuestion.getName() + " in GROUP: " + group.getTag()
+				// + " CREATED.");
 				question = createQuestion(group, xmlQuestion.getName());
 				// The value is always going to be a String class
 				question.setAnswer(xmlQuestion.getText());
@@ -221,40 +238,45 @@ public abstract class OrbeonImporter {
 		}
 	}
 
-//	@SuppressWarnings("rawtypes")
-//	private List<IQuestion> getQuestions(ICategory category, Element xmlQuestion, String prefix) {
-//		List<IQuestion> questions = new ArrayList<>();
-//		// Ignore subcategories
-//		if (xmlQuestion.getName().startsWith(SUBCATEGORY_PREFIX)) {
-//			return questions;
-//		}
-//
-//		if (prefix.length() > 0) {
-//			prefix = prefix + ".";
-//		}
-//		if (xmlQuestion.getName().startsWith(GROUP_PREFIX)) {
-//			// Remove 'group-' prefix and '-1' sufix of groups.
-//			String groupPrefix = prefix + xmlQuestion.getName().replace(GROUP_PREFIX, "");
-//			int sufixStartsAt = groupPrefix.lastIndexOf('-');
-//			if (sufixStartsAt > 0) {
-//				groupPrefix = groupPrefix.substring(0, sufixStartsAt);
-//			}
-//			// Create the groups
-//
-//			for (Iterator groupIterator = xmlQuestion.elementIterator(); groupIterator.hasNext();) {
-//				final Element xmlQuestionInGroup = (Element) groupIterator.next();
-//				// Look up for nested groups.
-//				questions.addAll(getQuestions(category, xmlQuestionInGroup, groupPrefix));
-//			}
-//		} else {
-//			// It is not in a group.
-//			IQuestion question = createQuestion(category, prefix + xmlQuestion.getName());
-//			// The value is always going to be a String class
-//			question.setAnswer(xmlQuestion.getText());
-//			questions.add(question);
-//		}
-//		return questions;
-//	}
+	// @SuppressWarnings("rawtypes")
+	// private List<IQuestion> getQuestions(ICategory category, Element
+	// xmlQuestion, String prefix) {
+	// List<IQuestion> questions = new ArrayList<>();
+	// // Ignore subcategories
+	// if (xmlQuestion.getName().startsWith(SUBCATEGORY_PREFIX)) {
+	// return questions;
+	// }
+	//
+	// if (prefix.length() > 0) {
+	// prefix = prefix + ".";
+	// }
+	// if (xmlQuestion.getName().startsWith(GROUP_PREFIX)) {
+	// // Remove 'group-' prefix and '-1' sufix of groups.
+	// String groupPrefix = prefix + xmlQuestion.getName().replace(GROUP_PREFIX,
+	// "");
+	// int sufixStartsAt = groupPrefix.lastIndexOf('-');
+	// if (sufixStartsAt > 0) {
+	// groupPrefix = groupPrefix.substring(0, sufixStartsAt);
+	// }
+	// // Create the groups
+	//
+	// for (Iterator groupIterator = xmlQuestion.elementIterator();
+	// groupIterator.hasNext();) {
+	// final Element xmlQuestionInGroup = (Element) groupIterator.next();
+	// // Look up for nested groups.
+	// questions.addAll(getQuestions(category, xmlQuestionInGroup,
+	// groupPrefix));
+	// }
+	// } else {
+	// // It is not in a group.
+	// IQuestion question = createQuestion(category, prefix +
+	// xmlQuestion.getName());
+	// // The value is always going to be a String class
+	// question.setAnswer(xmlQuestion.getText());
+	// questions.add(question);
+	// }
+	// return questions;
+	// }
 
 	public abstract ISubmittedForm createForm(String applicationName, String formName);
 

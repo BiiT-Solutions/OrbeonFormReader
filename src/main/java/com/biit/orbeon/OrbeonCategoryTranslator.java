@@ -35,7 +35,7 @@ public class OrbeonCategoryTranslator {
 
 	/**
 	 * Read the form answers of a orbeon form.
-	 * 
+	 *
 	 * @param orbeonApplication
 	 *            The application name of the form.
 	 * @param orbeonFormName
@@ -54,7 +54,7 @@ public class OrbeonCategoryTranslator {
 
 	/**
 	 * Read the form answers of a orbeon form.
-	 * 
+	 *
 	 * @param server
 	 *            The IP of the server that hosts the orbeon web application.
 	 * @param port
@@ -77,7 +77,7 @@ public class OrbeonCategoryTranslator {
 
 	/**
 	 * Gets the XML of a orbeon application.
-	 * 
+	 *
 	 * @param orbeonApplication
 	 *            The application name of the form.
 	 * @param orbeonFormName
@@ -97,7 +97,7 @@ public class OrbeonCategoryTranslator {
 
 	/**
 	 * Gets the XML of a orbeon application.
-	 * 
+	 *
 	 * @server orbeon server IP.
 	 * @port orbeon server port.
 	 * @param orbeonApplication
@@ -130,7 +130,7 @@ public class OrbeonCategoryTranslator {
 
 	/**
 	 * Create a relationship between category tags and its names.
-	 * 
+	 *
 	 * @param form
 	 *            form object to be filled up.
 	 * @param xmlText
@@ -146,7 +146,7 @@ public class OrbeonCategoryTranslator {
 
 	/**
 	 * Create a relationship between category tags and its names.
-	 * 
+	 *
 	 * @param form
 	 *            form object to be filled up.
 	 * @param xmlText
@@ -179,7 +179,7 @@ public class OrbeonCategoryTranslator {
 		// Ignore nodes that are not categories.
 		List<Node> nodes = language.selectNodes("child::node()");
 		for (Node node : nodes) {
-			if (node != null && node.getName() != null && node.getName().startsWith(CATEGORY_PREFIX)) {
+			if ((node != null) && (node.getName() != null) && node.getName().startsWith(CATEGORY_PREFIX)) {
 				Node label = node.selectSingleNode("./label");
 				tagsToName.put(node.getName(), label.getStringValue());
 			}
@@ -193,7 +193,7 @@ public class OrbeonCategoryTranslator {
 
 	/**
 	 * Create a relationship between category tags and its names.
-	 * 
+	 *
 	 * @param server
 	 *            The IP of the server that hosts the orbeon web application.
 	 * @param port
@@ -216,7 +216,7 @@ public class OrbeonCategoryTranslator {
 
 	/**
 	 * Create a relationship between category tags and its names.
-	 * 
+	 *
 	 * @param orbeonApplication
 	 *            The application name of the form.
 	 * @param orbeonFormName
@@ -230,12 +230,19 @@ public class OrbeonCategoryTranslator {
 	 */
 	public HashMap<String, String> readXml(ISubmittedForm form) throws DocumentException, MalformedURLException,
 			CategoryNameWithoutTranslation {
+		// Don't delete, useful when we want to retrieve the xml for debugging purposes
+//		try {
+//			Files.write(Paths.get(System.getProperty("java.io.tmpdir") + File.separator + "orbeon.xhtml"),
+//					getXml(form.getApplicationName(), form.getFormName()).getBytes());
+//		} catch (IOException e) {
+//			e.printStackTrace();
+//		}
 		return translateXml(form, getXml(form.getApplicationName(), form.getFormName()));
 	}
 
 	/**
 	 * Create a relationship between category tags and its names.
-	 * 
+	 *
 	 * @param form
 	 * @return
 	 * @throws DocumentException
@@ -257,7 +264,7 @@ public class OrbeonCategoryTranslator {
 
 	/**
 	 * Update all categories of a form with the user text.
-	 * 
+	 *
 	 * @param form
 	 * @throws CategoryNameWithoutTranslation
 	 *             if any category hasn't be updated.
