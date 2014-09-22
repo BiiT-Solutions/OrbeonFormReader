@@ -7,7 +7,7 @@
 	<groupId>com.biit</groupId>
 	<artifactId>orbeon-form-reader</artifactId>
 	<packaging>jar</packaging>
-	<version>0.3.0</version>
+	<version>0.3.1</version>
 	<name>Orbeon Form Reader</name>
 
 	<properties>
