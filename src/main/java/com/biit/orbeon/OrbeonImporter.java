@@ -166,7 +166,6 @@ public abstract class OrbeonImporter {
 
 	@SuppressWarnings("rawtypes")
 	private void createGroupsAnsQuestions(ICategory category, IGroup group, Element xmlQuestion) {
-		// List<IQuestion> questions = new ArrayList<>();
 		// Ignore subcategories
 		if (xmlQuestion.getName().startsWith(SUBCATEGORY_PREFIX)) {
 			return;
@@ -189,8 +188,6 @@ public abstract class OrbeonImporter {
 					// Add the group to the parent group
 					subgroup = createGroup(group, groupPrefix);
 					group.addGroup(subgroup);
-					// System.out.println("GROUP: " + groupPrefix +
-					// " in GROUP: " + group.getTag() + " CREATED.");
 				}
 				// The new active group is the group created
 				if (subgroup != null) {
@@ -204,8 +201,6 @@ public abstract class OrbeonImporter {
 					// Add the group to the category
 					group = createGroup(category, groupPrefix);
 					category.addGroup(group);
-					// System.out.println("GROUP: " + groupPrefix +
-					// " in CATEGORY: " + category.getTag() + " CREATED.");
 				}
 			}
 			for (Iterator groupIterator = xmlQuestion.elementIterator(); groupIterator.hasNext();) {
@@ -216,9 +211,6 @@ public abstract class OrbeonImporter {
 		} else {
 			IQuestion question = null;
 			if (group == null) {
-				// System.out.println("QUESTION: " + prefix +
-				// xmlQuestion.getName() + " in CATEGORY: " + category.getTag()
-				// + " CREATED.");
 				// It is not in a group.
 				question = createQuestion(category, xmlQuestion.getName());
 				// The value is always going to be a String class
@@ -227,9 +219,6 @@ public abstract class OrbeonImporter {
 			}
 			// Question belongs to a group
 			else {
-				// System.out.println("QUESTION: " + prefix +
-				// xmlQuestion.getName() + " in GROUP: " + group.getTag()
-				// + " CREATED.");
 				question = createQuestion(group, xmlQuestion.getName());
 				// The value is always going to be a String class
 				question.setAnswer(xmlQuestion.getText());
@@ -237,46 +226,6 @@ public abstract class OrbeonImporter {
 			}
 		}
 	}
-
-	// @SuppressWarnings("rawtypes")
-	// private List<IQuestion> getQuestions(ICategory category, Element
-	// xmlQuestion, String prefix) {
-	// List<IQuestion> questions = new ArrayList<>();
-	// // Ignore subcategories
-	// if (xmlQuestion.getName().startsWith(SUBCATEGORY_PREFIX)) {
-	// return questions;
-	// }
-	//
-	// if (prefix.length() > 0) {
-	// prefix = prefix + ".";
-	// }
-	// if (xmlQuestion.getName().startsWith(GROUP_PREFIX)) {
-	// // Remove 'group-' prefix and '-1' sufix of groups.
-	// String groupPrefix = prefix + xmlQuestion.getName().replace(GROUP_PREFIX,
-	// "");
-	// int sufixStartsAt = groupPrefix.lastIndexOf('-');
-	// if (sufixStartsAt > 0) {
-	// groupPrefix = groupPrefix.substring(0, sufixStartsAt);
-	// }
-	// // Create the groups
-	//
-	// for (Iterator groupIterator = xmlQuestion.elementIterator();
-	// groupIterator.hasNext();) {
-	// final Element xmlQuestionInGroup = (Element) groupIterator.next();
-	// // Look up for nested groups.
-	// questions.addAll(getQuestions(category, xmlQuestionInGroup,
-	// groupPrefix));
-	// }
-	// } else {
-	// // It is not in a group.
-	// IQuestion question = createQuestion(category, prefix +
-	// xmlQuestion.getName());
-	// // The value is always going to be a String class
-	// question.setAnswer(xmlQuestion.getText());
-	// questions.add(question);
-	// }
-	// return questions;
-	// }
 
 	public abstract ISubmittedForm createForm(String applicationName, String formName);
 
