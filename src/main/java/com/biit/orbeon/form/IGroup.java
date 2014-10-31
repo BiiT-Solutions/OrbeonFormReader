@@ -16,6 +16,8 @@ public interface IGroup extends ICommonAttributes {
 	List<IQuestion> getQuestions();
 
 	IGroup getGroup(String tag) throws GroupDoesNotExistException;
+	
+	List<IGroup> getRepeatableGroups(String tag);
 
 	IQuestion getQuestion(String questionTag) throws QuestionDoesNotExistException;
 }
