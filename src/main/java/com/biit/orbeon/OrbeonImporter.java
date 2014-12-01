@@ -59,7 +59,7 @@ public abstract class OrbeonImporter {
 	 */
 	public ISubmittedForm readFormAnswers(ISubmittedForm form, String orbeonDocumentId) throws MalformedURLException,
 			DocumentException, UnsupportedEncodingException {
-		readXml(getXml(form.getApplicationName(), form.getFormName(), orbeonDocumentId), form);
+		readXml(getXml(form.getApplicationName(), form.getName(), orbeonDocumentId), form);
 		return form;
 	}
 

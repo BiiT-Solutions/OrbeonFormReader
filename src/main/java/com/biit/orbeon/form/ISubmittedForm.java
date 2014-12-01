@@ -4,7 +4,7 @@ public interface ISubmittedForm extends ISubmittedObject {
 
 	public String getApplicationName();
 
-	public String getFormName();
+	public String getName();
 
 	public String getId();
 

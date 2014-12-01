@@ -22,6 +22,17 @@ public interface ISubmittedObject {
 
 	void setChildren(List<ISubmittedObject> children);
 
-	ISubmittedObject getChildren(Class<?> type, String tag);
+	/**
+	 * Makes a deep search of an element thas is from this type and has this tag.
+	 */
+	ISubmittedObject getChild(Class<?> type, String tag);
+
+	/**
+	 * Return all childrens that are of this class.
+	 * 
+	 * @param type
+	 * @return
+	 */
+	List<ISubmittedObject> getChildren(Class<?> type);
 
 }

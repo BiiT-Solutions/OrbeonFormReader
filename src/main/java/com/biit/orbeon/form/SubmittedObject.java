@@ -60,11 +60,8 @@ public class SubmittedObject implements ISubmittedObject {
 		this.children = children;
 	}
 
-	/**
-	 * Makes a deep search of an element thas is from this type and has this tag.
-	 */
 	@Override
-	public ISubmittedObject getChildren(Class<?> type, String tag) {
+	public ISubmittedObject getChild(Class<?> type, String tag) {
 		// Check first level.
 		for (ISubmittedObject child : getChildren()) {
 			if (type.isInstance(child)) {
@@ -72,12 +69,24 @@ public class SubmittedObject implements ISubmittedObject {
 					return child;
 				}
 			}
-			ISubmittedObject returnedChild = child.getChildren(type, tag);
+			ISubmittedObject returnedChild = child.getChild(type, tag);
 			if (returnedChild != null) {
 				return returnedChild;
 			}
 		}
 		return null;
+	}
+
+	@Override
+	public List<ISubmittedObject> getChildren(Class<?> type) {
+		List<ISubmittedObject> children = new ArrayList<>();
+		for (ISubmittedObject child : getChildren()) {
+			if (type.isInstance(child)) {
+				children.add(child);
+			}
+			children.addAll(child.getChildren(type));
+		}
+		return children;
 	}
 
 	@Override
@@ -87,4 +96,5 @@ public class SubmittedObject implements ISubmittedObject {
 		}
 		return getTag();
 	}
+
 }
