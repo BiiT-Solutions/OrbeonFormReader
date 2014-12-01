@@ -2,22 +2,33 @@ package com.biit.orbeon.form;
 
 import java.util.List;
 
-import com.biit.orbeon.form.exceptions.GroupDoesNotExistException;
-import com.biit.orbeon.form.exceptions.QuestionDoesNotExistException;
+public interface IGroup extends ISubmittedObject {
 
-public interface IGroup extends ICommonAttributes {
+	/**
+	 * Is a loop.
+	 * 
+	 * @return
+	 */
+	public boolean isRepeatable();
 
-	void addGroup(IGroup group);
+	/**
+	 * Mark this group as a loop.
+	 * 
+	 * @param repeatable
+	 */
+	public void setRepeatable(boolean repeatable);
 
-	void addQuestion(IQuestion questions);
+	/**
+	 * Returns the childs that are in an iteration. Returns a sublist of getChildren() with the elements in range
+	 * between [iteration * childrenByIteration, iteration * childrenByIteration + childrenByIteration - 1]
+	 * 
+	 * @param iteration
+	 * @return
+	 */
+	List<ISubmittedObject> getIteration(int iteration);
 
-	void addQuestions(List<IQuestion> questions);
-
-	List<IQuestion> getQuestions();
-
-	IGroup getGroup(String tag) throws GroupDoesNotExistException;
-	
-	List<IGroup> getRepeatableGroups(String tag);
-
-	IQuestion getQuestion(String questionTag) throws QuestionDoesNotExistException;
+	/**
+	 * Adds an iteration in the group.
+	 */
+	void increaseNumberOfIterations();
 }

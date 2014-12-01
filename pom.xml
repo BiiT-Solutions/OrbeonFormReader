@@ -7,7 +7,7 @@
 	<groupId>com.biit</groupId>
 	<artifactId>orbeon-form-reader</artifactId>
 	<packaging>jar</packaging>
-	<version>0.3.1</version>
+	<version>0.4.0</version>
 	<name>Orbeon Form Reader</name>
 
 	<properties>
@@ -17,6 +17,8 @@
 		<maven-surefire.version>2.14.1</maven-surefire.version>
 		<jaxen.version>1.1.6</jaxen.version>
 		<biit-common-utils.version>0.0.1</biit-common-utils.version>
+		<org.testng.version>6.8.8</org.testng.version>
+		
 	</properties>
 
 	<distributionManagement>
@@ -45,6 +47,13 @@
 			<artifactId>common-utils</artifactId>
 			<version>${biit-common-utils.version}</version>
 		</dependency>
+		<!-- Testing -->
+		<dependency>
+			<groupId>org.testng</groupId>
+			<artifactId>testng</artifactId>
+			<version>${org.testng.version}</version>
+			<scope>test</scope>
+		</dependency>
 	</dependencies>
 
 	<build>
@@ -56,6 +65,18 @@
 				<configuration>
 					<source>7</source>
 					<target>7</target>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-surefire-plugin</artifactId>
+				<version>${maven-surefire.version}</version>
+				<configuration>
+					<useFile>false</useFile>
+					<trimStackTrace>false</trimStackTrace>
+					<suiteXmlFiles>
+						<suiteXmlFile>src/test/config/testng.xml</suiteXmlFile>
+					</suiteXmlFiles>
 				</configuration>
 			</plugin>
 		</plugins>

@@ -1,0 +1,14 @@
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
+<suite thread-count="1" verbose="1" name="WebServiceSuite">
+	<test name="OrbeonImporterTest" enabled="true" preserve-order="true">
+		<groups>
+			<run>
+				<include name="orbeonImport" />
+			</run>
+		</groups>
+		<classes>
+			<class name="com.biit.orbeon.OrbeonImporterTest" />
+		</classes>
+	</test>
+</suite>
+

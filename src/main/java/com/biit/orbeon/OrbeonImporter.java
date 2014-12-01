@@ -1,6 +1,7 @@
 package com.biit.orbeon;
 
 import java.io.ByteArrayInputStream;
+import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Iterator;
@@ -15,14 +16,13 @@ import com.biit.orbeon.form.ICategory;
 import com.biit.orbeon.form.IGroup;
 import com.biit.orbeon.form.IQuestion;
 import com.biit.orbeon.form.ISubmittedForm;
-import com.biit.orbeon.form.exceptions.GroupDoesNotExistException;
+import com.biit.orbeon.form.ISubmittedObject;
 
 /**
  * Reads data from Orbeon Form.
  */
 public abstract class OrbeonImporter {
-	private final static String SUBCATEGORY_PREFIX = "subcategory-";
-	private final static String GROUP_PREFIX = "group-";
+	private final static String REPEATABLE_GROUP_SUFIX = "-iterator";
 
 	/**
 	 * Read the form answers of a orbeon form.
@@ -36,9 +36,10 @@ public abstract class OrbeonImporter {
 	 * @return a form with all user answers.
 	 * @throws MalformedURLException
 	 * @throws DocumentException
+	 * @throws UnsupportedEncodingException
 	 */
 	public ISubmittedForm readFormAnswers(String orbeonApplication, String orbeonFormName, String orbeonDocumentId)
-			throws MalformedURLException, DocumentException {
+			throws MalformedURLException, DocumentException, UnsupportedEncodingException {
 		ISubmittedForm form = createForm(orbeonApplication, orbeonFormName);
 		readXml(getXml(orbeonApplication, orbeonFormName, orbeonDocumentId), form);
 		return form;
@@ -54,9 +55,10 @@ public abstract class OrbeonImporter {
 	 * @return a form with all user answers.
 	 * @throws MalformedURLException
 	 * @throws DocumentException
+	 * @throws UnsupportedEncodingException
 	 */
 	public ISubmittedForm readFormAnswers(ISubmittedForm form, String orbeonDocumentId) throws MalformedURLException,
-			DocumentException {
+			DocumentException, UnsupportedEncodingException {
 		readXml(getXml(form.getApplicationName(), form.getFormName(), orbeonDocumentId), form);
 		return form;
 	}
@@ -77,9 +79,11 @@ public abstract class OrbeonImporter {
 	 * @return a form with all user answers.
 	 * @throws MalformedURLException
 	 * @throws DocumentException
+	 * @throws UnsupportedEncodingException
 	 */
 	public ISubmittedForm readFormAnswers(String protocol, String server, int port, String orbeonApplication,
-			String orbeonFormName, String orbeonDocumentId) throws MalformedURLException, DocumentException {
+			String orbeonFormName, String orbeonDocumentId) throws MalformedURLException, DocumentException,
+			UnsupportedEncodingException {
 		ISubmittedForm form = createForm(orbeonApplication, orbeonFormName);
 		readXml(getXml(protocol, server, port, orbeonApplication, orbeonFormName, orbeonDocumentId), form);
 		return form;
@@ -139,103 +143,54 @@ public abstract class OrbeonImporter {
 	 * @param xmlText
 	 * @return
 	 * @throws DocumentException
+	 * @throws UnsupportedEncodingException
 	 */
 	@SuppressWarnings("rawtypes")
-	public void readXml(String xmlText, ISubmittedForm form) throws DocumentException {
+	public void readXml(String xmlText, ISubmittedForm form) throws DocumentException, UnsupportedEncodingException {
 		SAXReader xmlReader = new SAXReader();
-		final Document xmlResponse = xmlReader.read(new ByteArrayInputStream(xmlText.getBytes()));
+		final Document xmlResponse = xmlReader.read(new ByteArrayInputStream(xmlText.getBytes("UTF-8")));
 		final Element formElement = xmlResponse.getRootElement();
 
-		for (Iterator formIterator = formElement.elementIterator(); formIterator.hasNext();) {
-			final Element xmlCategory = (Element) formIterator.next();
+		for (Iterator formChildren = formElement.elementIterator(); formChildren.hasNext();) {
+			final Element xmlCategory = (Element) formChildren.next();
 			// Hide email.
 			if (!xmlCategory.getName().equals("liferay_email_address")) {
-				ICategory category = createCategory(xmlCategory.getName());
-				form.addCategory(category);
-
-				for (Iterator sectionIterator = xmlCategory.elementIterator(); sectionIterator.hasNext();) {
-					final Element xmlQuestion = (Element) sectionIterator.next();
-					// Filter subcategories
-					// category.addQuestions(getQuestions(category, xmlQuestion,
-					// ""));
-					createGroupsAnsQuestions(category, null, xmlQuestion);
-				}
+				ICategory category = createCategory(form, xmlCategory.getName());
+				form.addChild(category);
+				readGroups(xmlCategory, category);
 			}
 		}
 	}
 
 	@SuppressWarnings("rawtypes")
-	private void createGroupsAnsQuestions(ICategory category, IGroup group, Element xmlQuestion) {
-		// Ignore subcategories
-		if (xmlQuestion.getName().startsWith(SUBCATEGORY_PREFIX)) {
-			return;
-		}
-		// Analyzing group
-		if (xmlQuestion.getName().startsWith(GROUP_PREFIX)) {
-			// Remove 'group-' prefix and '-1' sufix of groups.
-			String groupPrefix = xmlQuestion.getName().replace(GROUP_PREFIX, "");
-			int sufixStartsAt = groupPrefix.lastIndexOf('-');
-			if (sufixStartsAt > 0) {
-				groupPrefix = groupPrefix.substring(0, sufixStartsAt);
-			}
-			// Subgroups
-			if (group != null) {
-				// Create a group children of a previous group
-				IGroup subgroup = null;
-				try {
-					subgroup = group.getGroup(groupPrefix);
-				} catch (GroupDoesNotExistException e) {
-					// Add the group to the parent group
-					subgroup = createGroup(group, groupPrefix);
-					group.addGroup(subgroup);
-				}
-				// The new active group is the group created
-				if (subgroup != null) {
-					group = subgroup;
+	private void readGroups(Element xmlParentGroup, ISubmittedObject parent) {
+		for (Iterator children = xmlParentGroup.elementIterator(); children.hasNext();) {
+			final Element xmlGroupOrQuestion = (Element) children.next();
+			// If has nested elements, is a group.
+			if (xmlGroupOrQuestion.elementIterator().hasNext()) {
+				// If has a "-iterator" is a repeatable group.
+				if (xmlGroupOrQuestion.getName().endsWith(REPEATABLE_GROUP_SUFIX)) {
+					((IGroup) parent).increaseNumberOfIterations();
+					// Ignore dummy iterator group and put questions in the parent
+					readGroups(xmlGroupOrQuestion, parent);
+				} else {
+					IGroup group = createGroup(parent, xmlGroupOrQuestion.getName());
+					parent.addChild(group);
+					readGroups(xmlGroupOrQuestion, group);
 				}
 			} else {
-				// Create group under category
-				try {
-					group = category.getGroup(groupPrefix);
-				} catch (GroupDoesNotExistException e) {
-					// Add the group to the category
-					group = createGroup(category, groupPrefix);
-					category.addGroup(group);
-				}
-			}
-			for (Iterator groupIterator = xmlQuestion.elementIterator(); groupIterator.hasNext();) {
-				final Element xmlQuestionInGroup = (Element) groupIterator.next();
-				// Look up for nested groups.
-				createGroupsAnsQuestions(category, group, xmlQuestionInGroup);
-			}
-		} else {
-			IQuestion question = null;
-			if (group == null) {
-				// It is not in a group.
-				question = createQuestion(category, xmlQuestion.getName());
-				// The value is always going to be a String class
-				question.setAnswer(xmlQuestion.getText());
-				category.addQuestion(question);
-			}
-			// Question belongs to a group
-			else {
-				question = createQuestion(group, xmlQuestion.getName());
-				// The value is always going to be a String class
-				question.setAnswer(xmlQuestion.getText());
-				group.addQuestion(question);
+				IQuestion question = createQuestion(parent, xmlGroupOrQuestion.getName());
+				question.setAnswer(xmlGroupOrQuestion.getText());
+				parent.addChild(question);
 			}
 		}
 	}
 
 	public abstract ISubmittedForm createForm(String applicationName, String formName);
 
-	public abstract ICategory createCategory(String tag);
+	public abstract ICategory createCategory(ISubmittedObject parent, String tag);
 
-	public abstract IGroup createGroup(ICategory category, String tag);
+	public abstract IGroup createGroup(ISubmittedObject parent, String tag);
 
-	public abstract IGroup createGroup(IGroup group, String tag);
-
-	public abstract IQuestion createQuestion(IGroup group, String tag);
-
-	public abstract IQuestion createQuestion(ICategory category, String tag);
+	public abstract IQuestion createQuestion(ISubmittedObject parent, String tag);
 }
