@@ -48,6 +48,7 @@ public class SubmittedObject implements ISubmittedObject {
 	@Override
 	public void addChild(ISubmittedObject child) {
 		children.add(child);
+		child.setParent(this);
 	}
 
 	@Override
