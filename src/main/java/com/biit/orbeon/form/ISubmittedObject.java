@@ -2,7 +2,7 @@ package com.biit.orbeon.form;
 
 import java.util.List;
 
-public interface ISubmittedObject {
+public interface ISubmittedObject extends Comparable<ISubmittedObject> {
 
 	String getTag();
 
@@ -34,5 +34,16 @@ public interface ISubmittedObject {
 	 * @return
 	 */
 	List<ISubmittedObject> getChildren(Class<?> type);
+
+	/**
+	 * Creates a name with all the technical names
+	 */
+	String getPathName();
+
+	Integer getIndex(ISubmittedObject child);
+
+	int compareTo(ISubmittedObject arg0);
+
+	int getLevel();
 
 }
