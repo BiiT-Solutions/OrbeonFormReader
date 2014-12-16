@@ -106,7 +106,7 @@ public class SubmittedObject implements ISubmittedObject, Comparable<ISubmittedO
 	public String getPathName() {
 		// Ignores the form.
 		if (parent == null) {
-			return getTag();
+			return null;
 		} else {
 			String parentPath = parent.getPathName();
 			if (parentPath == null) {
