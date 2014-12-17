@@ -29,7 +29,10 @@ public class SubmittedObject implements ISubmittedObject, Comparable<ISubmittedO
 
 	@Override
 	public String getText() {
-		return text;
+		if (text != null) {
+			return text;
+		}
+		return tag;
 	}
 
 	@Override
