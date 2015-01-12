@@ -3,7 +3,7 @@
 	<test name="OrbeonImporterTest" enabled="true" preserve-order="true">
 		<groups>
 			<run>
-				<include name="orbeonImport" />
+				<exclude name="orbeonImport" />
 			</run>
 		</groups>
 		<classes>
