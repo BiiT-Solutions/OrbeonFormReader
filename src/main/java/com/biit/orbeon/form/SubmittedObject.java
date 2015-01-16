@@ -96,9 +96,6 @@ public class SubmittedObject implements ISubmittedObject, Comparable<ISubmittedO
 
 	@Override
 	public String toString() {
-		if (getChildren() != null && !getChildren().isEmpty()) {
-			return getPathName() + " " + getChildren();
-		}
 		return getPathName();
 	}
 
