@@ -11,12 +11,12 @@ import org.dom4j.DocumentException;
 import org.dom4j.Element;
 import org.dom4j.io.SAXReader;
 
+import com.biit.form.submitted.ISubmiitedGroup;
+import com.biit.form.submitted.ISubmittedCategory;
+import com.biit.form.submitted.ISubmittedForm;
+import com.biit.form.submitted.ISubmittedObject;
+import com.biit.form.submitted.ISubmittedQuestion;
 import com.biit.orbeon.configuration.OrbeonConfigurationReader;
-import com.biit.orbeon.form.ICategory;
-import com.biit.orbeon.form.IGroup;
-import com.biit.orbeon.form.IQuestion;
-import com.biit.orbeon.form.ISubmittedForm;
-import com.biit.orbeon.form.ISubmittedObject;
 
 /**
  * Reads data from Orbeon Form.
@@ -155,7 +155,7 @@ public abstract class OrbeonImporter {
 			final Element xmlCategory = (Element) formChildren.next();
 			// Hide email.
 			if (!xmlCategory.getName().equals("liferay_email_address")) {
-				ICategory category = createCategory(form, xmlCategory.getName());
+				ISubmittedCategory category = createCategory(form, xmlCategory.getName());
 				form.addChild(category);
 				readGroups(xmlCategory, category);
 			}
@@ -170,16 +170,16 @@ public abstract class OrbeonImporter {
 			if (xmlGroupOrQuestion.elementIterator().hasNext()) {
 				// If has a "-iterator" is a repeatable group.
 				if (xmlGroupOrQuestion.getName().endsWith(REPEATABLE_GROUP_SUFIX)) {
-					((IGroup) parent).increaseNumberOfIterations();
+					((ISubmiitedGroup) parent).increaseNumberOfIterations();
 					// Ignore dummy iterator group and put questions in the parent
 					readGroups(xmlGroupOrQuestion, parent);
 				} else {
-					IGroup group = createGroup(parent, xmlGroupOrQuestion.getName());
+					ISubmiitedGroup group = createGroup(parent, xmlGroupOrQuestion.getName());
 					parent.addChild(group);
 					readGroups(xmlGroupOrQuestion, group);
 				}
 			} else {
-				IQuestion question = createQuestion(parent, xmlGroupOrQuestion.getName());
+				ISubmittedQuestion question = createQuestion(parent, xmlGroupOrQuestion.getName());
 				question.setAnswer(xmlGroupOrQuestion.getText());
 				parent.addChild(question);
 			}
@@ -188,9 +188,9 @@ public abstract class OrbeonImporter {
 
 	public abstract ISubmittedForm createForm(String applicationName, String formName);
 
-	public abstract ICategory createCategory(ISubmittedObject parent, String tag);
+	public abstract ISubmittedCategory createCategory(ISubmittedObject parent, String tag);
 
-	public abstract IGroup createGroup(ISubmittedObject parent, String tag);
+	public abstract ISubmiitedGroup createGroup(ISubmittedObject parent, String tag);
 
-	public abstract IQuestion createQuestion(ISubmittedObject parent, String tag);
+	public abstract ISubmittedQuestion createQuestion(ISubmittedObject parent, String tag);
 }

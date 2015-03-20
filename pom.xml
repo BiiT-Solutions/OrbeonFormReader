@@ -7,7 +7,7 @@
 	<groupId>com.biit</groupId>
 	<artifactId>orbeon-form-reader</artifactId>
 	<packaging>jar</packaging>
-	<version>0.4.0</version>
+	<version>0.4.1</version>
 	<name>Orbeon Form Reader</name>
 
 	<properties>
@@ -18,7 +18,7 @@
 		<jaxen.version>1.1.6</jaxen.version>
 		<biit-common-utils.version>0.0.1</biit-common-utils.version>
 		<org.testng.version>6.8.8</org.testng.version>
-		
+		<biit-form-submitted.version>[0.0,0.1)</biit-form-submitted.version>
 	</properties>
 
 	<distributionManagement>
@@ -46,6 +46,11 @@
 			<groupId>com.biit</groupId>
 			<artifactId>common-utils</artifactId>
 			<version>${biit-common-utils.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.biit</groupId>
+			<artifactId>form-structure-submitted</artifactId>
+			<version>${biit-form-submitted.version}</version>
 		</dependency>
 		<!-- Testing -->
 		<dependency>
