@@ -38,9 +38,9 @@ public abstract class OrbeonImporter {
 	 * @throws DocumentException
 	 * @throws UnsupportedEncodingException
 	 */
-	public ISubmittedForm readFormAnswers(String orbeonApplication, String orbeonFormName, String orbeonDocumentId)
-			throws MalformedURLException, DocumentException, UnsupportedEncodingException {
-		ISubmittedForm form = createForm(orbeonApplication, orbeonFormName);
+	public ISubmittedForm readFormAnswers(String orbeonApplication, String orbeonFormName, String orbeonDocumentId,
+			String orbeonFormVersion) throws MalformedURLException, DocumentException, UnsupportedEncodingException {
+		ISubmittedForm form = createForm(orbeonApplication, orbeonFormName, orbeonFormVersion);
 		readXml(getXml(orbeonApplication, orbeonFormName, orbeonDocumentId), form);
 		return form;
 	}
@@ -82,9 +82,9 @@ public abstract class OrbeonImporter {
 	 * @throws UnsupportedEncodingException
 	 */
 	public ISubmittedForm readFormAnswers(String protocol, String server, int port, String orbeonApplication,
-			String orbeonFormName, String orbeonDocumentId) throws MalformedURLException, DocumentException,
-			UnsupportedEncodingException {
-		ISubmittedForm form = createForm(orbeonApplication, orbeonFormName);
+			String orbeonFormName, String orbeonDocumentId, String orbeonFormVersion) throws MalformedURLException,
+			DocumentException, UnsupportedEncodingException {
+		ISubmittedForm form = createForm(orbeonApplication, orbeonFormName, orbeonFormVersion);
 		readXml(getXml(protocol, server, port, orbeonApplication, orbeonFormName, orbeonDocumentId), form);
 		return form;
 	}
@@ -171,7 +171,8 @@ public abstract class OrbeonImporter {
 				// If has a "-iterator" is a repeatable group.
 				if (xmlGroupOrQuestion.getName().endsWith(REPEATABLE_GROUP_SUFIX)) {
 					((ISubmittedGroup) parent).increaseNumberOfIterations();
-					// Ignore dummy iterator group and put questions in the parent
+					// Ignore dummy iterator group and put questions in the
+					// parent
 					readGroups(xmlGroupOrQuestion, parent);
 				} else {
 					ISubmittedGroup group = createGroup(parent, xmlGroupOrQuestion.getName());
@@ -186,7 +187,7 @@ public abstract class OrbeonImporter {
 		}
 	}
 
-	public abstract ISubmittedForm createForm(String applicationName, String formName);
+	public abstract ISubmittedForm createForm(String applicationName, String formName, String formVersion);
 
 	public abstract ISubmittedCategory createCategory(ISubmittedObject parent, String tag);
 
