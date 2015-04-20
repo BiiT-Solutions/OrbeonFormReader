@@ -6,7 +6,7 @@
 	<groupId>com.biit</groupId>
 	<artifactId>orbeon-form-reader</artifactId>
 	<packaging>jar</packaging>
-	<version>0.4.6-SNAPSHOT</version>
+	<version>0.5.0-SNAPSHOT</version>
 	<name>Orbeon Form Reader</name>
 
 	<distributionManagement>
@@ -35,12 +35,13 @@
 		<maven-surefire.version>2.14.1</maven-surefire.version>
 		<jaxen.version>1.1.6</jaxen.version>
 		<org.testng.version>6.8.8</org.testng.version>
-		<biit-common-utils.version>[0.2,0.3)</biit-common-utils.version>
-		<biit-form-submitted.version>0.0.5-SNAPSHOT</biit-form-submitted.version>
 		<maven-resources-plugin.version>2.7</maven-resources-plugin.version>
 		<maven-release-plugin.version>2.5.1</maven-release-plugin.version>
 		<maven-scm-provider-gitexe.version>1.9.2</maven-scm-provider-gitexe.version>
 		<project.scm.id>git</project.scm.id>
+		<!-- BiiT dependencies -->
+		<biit-common-utils.version>[0.4,0.5)</biit-common-utils.version>
+		<biit-form-submitted.version>[0.1,0.2)</biit-form-submitted.version>
 	</properties>
 
 	<dependencies>
