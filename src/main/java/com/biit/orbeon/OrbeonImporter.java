@@ -38,9 +38,9 @@ public abstract class OrbeonImporter {
 	 * @throws DocumentException
 	 * @throws UnsupportedEncodingException
 	 */
-	public ISubmittedForm readFormAnswers(String orbeonApplication, String orbeonFormName, String orbeonDocumentId,
-			String orbeonFormVersion) throws MalformedURLException, DocumentException, UnsupportedEncodingException {
-		ISubmittedForm form = createForm(orbeonApplication, orbeonFormName, orbeonFormVersion);
+	public ISubmittedForm readFormAnswers(String orbeonApplication, String orbeonFormName, String orbeonDocumentId)
+			throws MalformedURLException, DocumentException, UnsupportedEncodingException {
+		ISubmittedForm form = createForm(orbeonApplication, orbeonFormName);
 		readXml(getXml(orbeonApplication, orbeonFormName, orbeonDocumentId), form);
 		return form;
 	}
@@ -82,9 +82,9 @@ public abstract class OrbeonImporter {
 	 * @throws UnsupportedEncodingException
 	 */
 	public ISubmittedForm readFormAnswers(String protocol, String server, int port, String orbeonApplication,
-			String orbeonFormName, String orbeonDocumentId, String orbeonFormVersion) throws MalformedURLException,
-			DocumentException, UnsupportedEncodingException {
-		ISubmittedForm form = createForm(orbeonApplication, orbeonFormName, orbeonFormVersion);
+			String orbeonFormName, String orbeonDocumentId) throws MalformedURLException, DocumentException,
+			UnsupportedEncodingException {
+		ISubmittedForm form = createForm(orbeonApplication, orbeonFormName);
 		readXml(getXml(protocol, server, port, orbeonApplication, orbeonFormName, orbeonDocumentId), form);
 		return form;
 	}
@@ -187,7 +187,7 @@ public abstract class OrbeonImporter {
 		}
 	}
 
-	public abstract ISubmittedForm createForm(String applicationName, String formName, String formVersion);
+	public abstract ISubmittedForm createForm(String applicationName, String formName);
 
 	public abstract ISubmittedCategory createCategory(ISubmittedObject parent, String tag);
 
