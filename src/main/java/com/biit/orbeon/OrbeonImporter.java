@@ -11,9 +11,9 @@ import org.dom4j.DocumentException;
 import org.dom4j.Element;
 import org.dom4j.io.SAXReader;
 
-import com.biit.form.submitted.ISubmiitedGroup;
 import com.biit.form.submitted.ISubmittedCategory;
 import com.biit.form.submitted.ISubmittedForm;
+import com.biit.form.submitted.ISubmittedGroup;
 import com.biit.form.submitted.ISubmittedObject;
 import com.biit.form.submitted.ISubmittedQuestion;
 import com.biit.orbeon.configuration.OrbeonConfigurationReader;
@@ -170,11 +170,11 @@ public abstract class OrbeonImporter {
 			if (xmlGroupOrQuestion.elementIterator().hasNext()) {
 				// If has a "-iterator" is a repeatable group.
 				if (xmlGroupOrQuestion.getName().endsWith(REPEATABLE_GROUP_SUFIX)) {
-					((ISubmiitedGroup) parent).increaseNumberOfIterations();
+					((ISubmittedGroup) parent).increaseNumberOfIterations();
 					// Ignore dummy iterator group and put questions in the parent
 					readGroups(xmlGroupOrQuestion, parent);
 				} else {
-					ISubmiitedGroup group = createGroup(parent, xmlGroupOrQuestion.getName());
+					ISubmittedGroup group = createGroup(parent, xmlGroupOrQuestion.getName());
 					parent.addChild(group);
 					readGroups(xmlGroupOrQuestion, group);
 				}
@@ -190,7 +190,7 @@ public abstract class OrbeonImporter {
 
 	public abstract ISubmittedCategory createCategory(ISubmittedObject parent, String tag);
 
-	public abstract ISubmiitedGroup createGroup(ISubmittedObject parent, String tag);
+	public abstract ISubmittedGroup createGroup(ISubmittedObject parent, String tag);
 
 	public abstract ISubmittedQuestion createQuestion(ISubmittedObject parent, String tag);
 }
