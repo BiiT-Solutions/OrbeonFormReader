@@ -1,25 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 
 
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.biit</groupId>
 	<artifactId>orbeon-form-reader</artifactId>
 	<packaging>jar</packaging>
-	<version>0.5.0</version>
+	<version>0.6.1-SNAPSHOT</version>
 	<name>Orbeon Form Reader</name>
-
-	<properties>
-		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<maven-compiler-plugin.version>3.1</maven-compiler-plugin.version>
-		<maven-antrun-plugin.version>1.7</maven-antrun-plugin.version>
-		<maven-surefire.version>2.14.1</maven-surefire.version>
-		<jaxen.version>1.1.6</jaxen.version>
-		<biit-common-utils.version>0.0.1</biit-common-utils.version>
-		<org.testng.version>6.8.8</org.testng.version>
-		<biit-form-submitted.version>[0.0,0.1)</biit-form-submitted.version>
-	</properties>
 
 	<distributionManagement>
 		<repository>
@@ -27,7 +15,34 @@
 			<name>biit-releases</name>
 			<url>https://dev.biit-solutions.com:8443/mavenartifactory/ext-release-local</url>
 		</repository>
+		<snapshotRepository>
+			<id>snapshots</id>
+			<name>libs-snapshot</name>
+			<url>https://dev.biit-solutions.com:8443/mavenartifactory/libs-snapshot</url>
+		</snapshotRepository>
 	</distributionManagement>
+
+	<scm>
+		<connection>scm:git:dev.biit-solutions.com:OrbeonFormsReader.git</connection>
+		<developerConnection>scm:git:dev.biit-solutions.com:OrbeonFormsReader.git</developerConnection>
+		<tag>orbeon-form-reader</tag>
+	</scm>
+
+	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<maven-compiler-plugin.version>3.1</maven-compiler-plugin.version>
+		<maven-antrun-plugin.version>1.7</maven-antrun-plugin.version>
+		<maven-surefire.version>2.14.1</maven-surefire.version>
+		<jaxen.version>1.1.6</jaxen.version>
+		<org.testng.version>6.8.8</org.testng.version>
+		<maven-resources-plugin.version>2.7</maven-resources-plugin.version>
+		<maven-release-plugin.version>2.5.1</maven-release-plugin.version>
+		<maven-scm-provider-gitexe.version>1.9.2</maven-scm-provider-gitexe.version>
+		<project.scm.id>git</project.scm.id>
+		<!-- BiiT dependencies -->
+		<biit-common-utils.version>[0.4,0.5)</biit-common-utils.version>
+		<biit-form-submitted.version>[0.1,0.2)</biit-form-submitted.version>
+	</properties>
 
 	<dependencies>
 		<!-- For reading XML -->
@@ -82,6 +97,28 @@
 					<suiteXmlFiles>
 						<suiteXmlFile>src/test/config/testng.xml</suiteXmlFile>
 					</suiteXmlFiles>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-resources-plugin</artifactId>
+				<version>${maven-resources-plugin.version}</version>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-release-plugin</artifactId>
+				<version>${maven-release-plugin.version}</version>
+				<dependencies>
+					<dependency>
+						<groupId>org.apache.maven.scm</groupId>
+						<artifactId>maven-scm-provider-gitexe</artifactId>
+						<version>${maven-scm-provider-gitexe.version}</version>
+					</dependency>
+				</dependencies>
+				<configuration>
+					<checkModificationExcludes>
+						<checkModificationExclude>pom.xml</checkModificationExclude>
+					</checkModificationExcludes>
 				</configuration>
 			</plugin>
 		</plugins>

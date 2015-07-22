@@ -4,7 +4,9 @@ import java.io.ByteArrayInputStream;
 import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 
 import org.dom4j.Document;
 import org.dom4j.DocumentException;
@@ -22,7 +24,9 @@ import com.biit.orbeon.configuration.OrbeonConfigurationReader;
  * Reads data from Orbeon Form.
  */
 public abstract class OrbeonImporter {
+
 	private final static String REPEATABLE_GROUP_SUFIX = "-iterator";
+	private List<String> questionPath;
 
 	/**
 	 * Read the form answers of a orbeon form.
@@ -89,6 +93,10 @@ public abstract class OrbeonImporter {
 		return form;
 	}
 
+	public void setOrbeonStructure(String xmlText) throws DocumentException {
+		OrbeonQuestionAnalyzer.setXmlStructure(xmlText);
+	}
+
 	/**
 	 * Gets the XML of a orbeon application.
 	 * 
@@ -126,6 +134,9 @@ public abstract class OrbeonImporter {
 	 */
 	public static String getXml(String protocol, String server, int port, String orbeonApplication,
 			String orbeonFormName, String orbeonDocumentId) throws MalformedURLException, DocumentException {
+		// Get the orbeon document structure
+		OrbeonQuestionAnalyzer.setXmlStructure(protocol, server, port, orbeonApplication, orbeonFormName);
+		// Get the submitted docuemnt
 		String xmlURL = protocol + "://" + server + ":" + port + "/orbeon/fr/service/persistence/crud/"
 				+ orbeonApplication + "/" + orbeonFormName + "/data/" + orbeonDocumentId + "/data.xml";
 		SAXReader xmlReader = new SAXReader();
@@ -151,10 +162,14 @@ public abstract class OrbeonImporter {
 		final Document xmlResponse = xmlReader.read(new ByteArrayInputStream(xmlText.getBytes("UTF-8")));
 		final Element formElement = xmlResponse.getRootElement();
 
+		questionPath = new ArrayList<String>();
 		for (Iterator formChildren = formElement.elementIterator(); formChildren.hasNext();) {
 			final Element xmlCategory = (Element) formChildren.next();
 			// Hide email.
 			if (!xmlCategory.getName().equals("liferay_email_address")) {
+				// With each category we restart the orbeon path
+				questionPath.clear();
+				questionPath.add(xmlCategory.getName());
 				ISubmittedCategory category = createCategory(form, xmlCategory.getName());
 				form.addChild(category);
 				readGroups(xmlCategory, category);
@@ -171,17 +186,32 @@ public abstract class OrbeonImporter {
 				// If has a "-iterator" is a repeatable group.
 				if (xmlGroupOrQuestion.getName().endsWith(REPEATABLE_GROUP_SUFIX)) {
 					((ISubmittedGroup) parent).increaseNumberOfIterations();
-					// Ignore dummy iterator group and put questions in the parent
+					// Ignore dummy iterator group and put questions in the
+					// parent
 					readGroups(xmlGroupOrQuestion, parent);
 				} else {
+					questionPath.add(xmlGroupOrQuestion.getName());
 					ISubmittedGroup group = createGroup(parent, xmlGroupOrQuestion.getName());
 					parent.addChild(group);
 					readGroups(xmlGroupOrQuestion, group);
+					questionPath.remove(questionPath.size() - 1);
 				}
 			} else {
-				ISubmittedQuestion question = createQuestion(parent, xmlGroupOrQuestion.getName());
-				question.setAnswer(xmlGroupOrQuestion.getText());
-				parent.addChild(question);
+				questionPath.add(xmlGroupOrQuestion.getName());
+				if (OrbeonQuestionAnalyzer.isStructureSet()
+						&& OrbeonQuestionAnalyzer.isQuestionMultiSelect(questionPath)) {
+					String[] answers = xmlGroupOrQuestion.getText().split(" ");
+					for (String answer : answers) {
+						ISubmittedQuestion question = createQuestion(parent, xmlGroupOrQuestion.getName());
+						question.setAnswer(answer);
+						parent.addChild(question);
+					}
+				} else {
+					ISubmittedQuestion question = createQuestion(parent, xmlGroupOrQuestion.getName());
+					question.setAnswer(xmlGroupOrQuestion.getText());
+					parent.addChild(question);
+				}
+				questionPath.remove(questionPath.size() - 1);
 			}
 		}
 	}
