@@ -55,6 +55,10 @@ public class OrbeonQuestionAnalyzer {
 				for (int i = 1; i < questionPath.size() - 1; i++) {
 					String groupName = questionPath.get(i);
 					resourceSection = resourceSection.selectSingleNode("//fr:section[@id='" + groupName + "-control']");
+					// Does not exist the group or category, do not try to search for a question.
+					if (resourceSection == null) {
+						break;
+					}
 				}
 				if (resourceSection != null) {
 					return isQuestionMultiSelect(resourceSection, questionPath.get(questionPath.size() - 1));
