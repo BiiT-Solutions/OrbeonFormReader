@@ -11,7 +11,7 @@ import com.biit.form.submitted.implementation.SubmittedGroup;
 import com.biit.form.submitted.implementation.SubmittedQuestion;
 import com.biit.orbeon.OrbeonImporter;
 
-public class SubmittedOrbeonFormImporter extends OrbeonImporter {
+public class SimpleSubmittedOrbeonFormImporter extends OrbeonImporter {
 
 	@Override
 	public ISubmittedForm createForm(String applicationName, String formName) {
