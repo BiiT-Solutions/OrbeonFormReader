@@ -26,7 +26,6 @@ import com.biit.orbeon.configuration.OrbeonConfigurationReader;
 public abstract class OrbeonImporter {
 
 	private final static String REPEATABLE_GROUP_SUFIX = "-iterator";
-	private List<String> questionPath;
 
 	/**
 	 * Read the form answers of a orbeon form.
@@ -42,8 +41,8 @@ public abstract class OrbeonImporter {
 	 * @throws DocumentException
 	 * @throws UnsupportedEncodingException
 	 */
-	public ISubmittedForm readFormAnswers(String orbeonApplication, String orbeonFormName, String orbeonDocumentId)
-			throws MalformedURLException, DocumentException, UnsupportedEncodingException {
+	public ISubmittedForm readFormAnswers(String orbeonApplication, String orbeonFormName, String orbeonDocumentId) throws MalformedURLException,
+			DocumentException, UnsupportedEncodingException {
 		ISubmittedForm form = createForm(orbeonApplication, orbeonFormName);
 		readXml(getXml(orbeonApplication, orbeonFormName, orbeonDocumentId), form);
 		return form;
@@ -61,14 +60,14 @@ public abstract class OrbeonImporter {
 	 * @throws DocumentException
 	 * @throws UnsupportedEncodingException
 	 */
-	public ISubmittedForm readFormAnswers(ISubmittedForm form, String orbeonDocumentId) throws MalformedURLException,
-			DocumentException, UnsupportedEncodingException {
+	public ISubmittedForm readFormAnswers(ISubmittedForm form, String orbeonDocumentId) throws MalformedURLException, DocumentException,
+			UnsupportedEncodingException {
 		readXml(getXml(form.getApplicationName(), form.getName(), orbeonDocumentId), form);
 		return form;
 	}
 
 	/**
-	 * Read the form answers of a orbeon form.
+	 * Read the form answers of an orbeon form.
 	 * 
 	 * @param server
 	 *            The IP of the server that hosts the orbeon web application.
@@ -85,9 +84,8 @@ public abstract class OrbeonImporter {
 	 * @throws DocumentException
 	 * @throws UnsupportedEncodingException
 	 */
-	public ISubmittedForm readFormAnswers(String protocol, String server, int port, String orbeonApplication,
-			String orbeonFormName, String orbeonDocumentId) throws MalformedURLException, DocumentException,
-			UnsupportedEncodingException {
+	public ISubmittedForm readFormAnswers(String protocol, String server, int port, String orbeonApplication, String orbeonFormName, String orbeonDocumentId)
+			throws MalformedURLException, DocumentException, UnsupportedEncodingException {
 		ISubmittedForm form = createForm(orbeonApplication, orbeonFormName);
 		readXml(getXml(protocol, server, port, orbeonApplication, orbeonFormName, orbeonDocumentId), form);
 		return form;
@@ -110,11 +108,9 @@ public abstract class OrbeonImporter {
 	 * @throws MalformedURLException
 	 * @throws DocumentException
 	 */
-	public static String getXml(String orbeonApplication, String orbeonFormName, String orbeonDocumentId)
-			throws MalformedURLException, DocumentException {
-		return getXml(OrbeonConfigurationReader.getInstance().getOrbeonProtocol(), OrbeonConfigurationReader
-				.getInstance().getOrbeonServer(), OrbeonConfigurationReader.getInstance().getOrbeonPort(),
-				orbeonApplication, orbeonFormName, orbeonDocumentId);
+	public static String getXml(String orbeonApplication, String orbeonFormName, String orbeonDocumentId) throws MalformedURLException, DocumentException {
+		return getXml(OrbeonConfigurationReader.getInstance().getOrbeonProtocol(), OrbeonConfigurationReader.getInstance().getOrbeonServer(),
+				OrbeonConfigurationReader.getInstance().getOrbeonPort(), orbeonApplication, orbeonFormName, orbeonDocumentId);
 	}
 
 	/**
@@ -132,13 +128,13 @@ public abstract class OrbeonImporter {
 	 * @throws MalformedURLException
 	 * @throws DocumentException
 	 */
-	public static String getXml(String protocol, String server, int port, String orbeonApplication,
-			String orbeonFormName, String orbeonDocumentId) throws MalformedURLException, DocumentException {
+	public static String getXml(String protocol, String server, int port, String orbeonApplication, String orbeonFormName, String orbeonDocumentId)
+			throws MalformedURLException, DocumentException {
 		// Get the orbeon document structure
 		OrbeonQuestionAnalyzer.setXmlStructure(protocol, server, port, orbeonApplication, orbeonFormName);
 		// Get the submitted docuemnt
-		String xmlURL = protocol + "://" + server + ":" + port + "/orbeon/fr/service/persistence/crud/"
-				+ orbeonApplication + "/" + orbeonFormName + "/data/" + orbeonDocumentId + "/data.xml";
+		String xmlURL = protocol + "://" + server + ":" + port + "/orbeon/fr/service/persistence/crud/" + orbeonApplication + "/" + orbeonFormName + "/data/"
+				+ orbeonDocumentId + "/data.xml";
 		SAXReader xmlReader = new SAXReader();
 
 		final Document xmlResponse = xmlReader.read(new URL(xmlURL));
@@ -162,7 +158,7 @@ public abstract class OrbeonImporter {
 		final Document xmlResponse = xmlReader.read(new ByteArrayInputStream(xmlText.getBytes("UTF-8")));
 		final Element formElement = xmlResponse.getRootElement();
 
-		questionPath = new ArrayList<String>();
+		List<String> questionPath = new ArrayList<String>();
 		for (Iterator formChildren = formElement.elementIterator(); formChildren.hasNext();) {
 			final Element xmlCategory = (Element) formChildren.next();
 			// Hide email.
@@ -172,13 +168,13 @@ public abstract class OrbeonImporter {
 				questionPath.add(xmlCategory.getName());
 				ISubmittedCategory category = createCategory(form, xmlCategory.getName());
 				form.addChild(category);
-				readGroups(xmlCategory, category);
+				readGroups(xmlCategory, category, questionPath);
 			}
 		}
 	}
 
 	@SuppressWarnings("rawtypes")
-	private void readGroups(Element xmlParentGroup, ISubmittedObject parent) {
+	private void readGroups(Element xmlParentGroup, ISubmittedObject parent, List<String> questionPath) {
 		for (Iterator children = xmlParentGroup.elementIterator(); children.hasNext();) {
 			final Element xmlGroupOrQuestion = (Element) children.next();
 			// If has nested elements, is a group.
@@ -188,18 +184,17 @@ public abstract class OrbeonImporter {
 					((ISubmittedGroup) parent).increaseNumberOfIterations();
 					// Ignore dummy iterator group and put questions in the
 					// parent
-					readGroups(xmlGroupOrQuestion, parent);
+					readGroups(xmlGroupOrQuestion, parent, questionPath);
 				} else {
 					questionPath.add(xmlGroupOrQuestion.getName());
 					ISubmittedGroup group = createGroup(parent, xmlGroupOrQuestion.getName());
 					parent.addChild(group);
-					readGroups(xmlGroupOrQuestion, group);
+					readGroups(xmlGroupOrQuestion, group, questionPath);
 					questionPath.remove(questionPath.size() - 1);
 				}
 			} else {
 				questionPath.add(xmlGroupOrQuestion.getName());
-				if (OrbeonQuestionAnalyzer.isStructureSet()
-						&& OrbeonQuestionAnalyzer.isQuestionMultiSelect(questionPath)) {
+				if (OrbeonQuestionAnalyzer.isStructureSet() && OrbeonQuestionAnalyzer.isQuestionMultiSelect(questionPath)) {
 					String[] answers = xmlGroupOrQuestion.getText().split(" ");
 					for (String answer : answers) {
 						ISubmittedQuestion question = createQuestion(parent, xmlGroupOrQuestion.getName());
