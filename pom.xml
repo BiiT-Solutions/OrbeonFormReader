@@ -6,7 +6,7 @@
 	<groupId>com.biit</groupId>
 	<artifactId>orbeon-form-reader</artifactId>
 	<packaging>jar</packaging>
-	<version>0.6.3-SNAPSHOT</version>
+	<version>0.6.4-SNAPSHOT</version>
 	<name>Orbeon Form Reader</name>
 
 	<distributionManagement>
