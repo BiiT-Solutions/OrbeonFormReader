@@ -5,6 +5,8 @@ import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 
@@ -194,17 +196,13 @@ public abstract class OrbeonImporter {
 				}
 			} else {
 				questionPath.add(xmlGroupOrQuestion.getName());
+				ISubmittedQuestion question = createQuestion(parent, xmlGroupOrQuestion.getName());
+				parent.addChild(question);
 				if (OrbeonQuestionAnalyzer.isStructureSet() && OrbeonQuestionAnalyzer.isQuestionMultiSelect(questionPath)) {
 					String[] answers = xmlGroupOrQuestion.getText().split(" ");
-					for (String answer : answers) {
-						ISubmittedQuestion question = createQuestion(parent, xmlGroupOrQuestion.getName());
-						question.setAnswer(answer);
-						parent.addChild(question);
-					}
+					question.setAnswers(new HashSet<String>(Arrays.asList(answers)));
 				} else {
-					ISubmittedQuestion question = createQuestion(parent, xmlGroupOrQuestion.getName());
 					question.setAnswer(xmlGroupOrQuestion.getText());
-					parent.addChild(question);
 				}
 				questionPath.remove(questionPath.size() - 1);
 			}

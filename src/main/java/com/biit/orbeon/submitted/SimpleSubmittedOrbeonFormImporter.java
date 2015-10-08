@@ -11,6 +11,10 @@ import com.biit.form.submitted.implementation.SubmittedGroup;
 import com.biit.form.submitted.implementation.SubmittedQuestion;
 import com.biit.orbeon.OrbeonImporter;
 
+/**
+ * Gets the basic information from an orbeon form.
+ *
+ */
 public class SimpleSubmittedOrbeonFormImporter extends OrbeonImporter {
 
 	@Override
