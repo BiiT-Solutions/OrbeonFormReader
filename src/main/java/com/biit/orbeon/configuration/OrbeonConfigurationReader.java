@@ -1,12 +1,14 @@
 package com.biit.orbeon.configuration;
 
-import java.io.IOException;
-import java.util.Properties;
+import com.biit.logger.BiitCommonLogger;
+import com.biit.utils.configuration.ConfigurationReader;
+import com.biit.utils.configuration.PropertiesSourceFile;
+import com.biit.utils.configuration.SystemVariablePropertiesSourceFile;
+import com.biit.utils.configuration.exception.PropertyNotFoundException;
 
-import com.biit.utils.file.PropertiesFile;
-
-public class OrbeonConfigurationReader {
-	private final String DATABASE_CONFIG_FILE = "settings.conf";
+public class OrbeonConfigurationReader extends ConfigurationReader {
+	private final String CONFIG_FILE = "settings.conf";
+	private static final String SYSTEM_VARIABLE_CONFIG = "ORBEON_IMPORTER_CONFIG";
 
 	// Liferay Profile
 	private final String ORBEON_SERVER_TAG = "orbeon.server";
@@ -17,14 +19,19 @@ public class OrbeonConfigurationReader {
 	private final int DEFAULT_ORBEON_PORT = 8080;
 	private final String DEFAULT_ORBEON_PROTOCOL = "http";
 
-	private String orbeonServer;
-	private Integer orbeonPort;
-	private String orbeonProtocol;
-
 	private static OrbeonConfigurationReader instance;
 
 	private OrbeonConfigurationReader() {
-		readConfig();
+		super();
+
+		addProperty(ORBEON_SERVER_TAG, DEFAULT_ORBEON_SERVER);
+		addProperty(ORBEON_SERVER_PORT, DEFAULT_ORBEON_PORT);
+		addProperty(ORBEON_SERVER_PROTOCOL, DEFAULT_ORBEON_PROTOCOL);
+
+		addPropertiesSource(new PropertiesSourceFile(CONFIG_FILE));
+		addPropertiesSource(new SystemVariablePropertiesSourceFile(SYSTEM_VARIABLE_CONFIG, CONFIG_FILE));
+
+		readConfigurations();
 	}
 
 	public static OrbeonConfigurationReader getInstance() {
@@ -38,47 +45,31 @@ public class OrbeonConfigurationReader {
 		return instance;
 	}
 
-	/**
-	 * Read database config from resource and update default connection parameters.
-	 */
-	private void readConfig() {
-		Properties prop = new Properties();
+	private String getPropertyLogException(String propertyId) {
 		try {
-			prop = PropertiesFile.load(DATABASE_CONFIG_FILE);
-			orbeonServer = prop.getProperty(ORBEON_SERVER_TAG);
-			try {
-				orbeonPort = Integer.parseInt(prop.getProperty(ORBEON_SERVER_PORT));
-			} catch (Exception e) {
-				// Do nothing.
-			}
-			orbeonProtocol = prop.getProperty(ORBEON_SERVER_PROTOCOL);
-		} catch (IOException e) {
-			// Do nothing.
-		}
-
-		if (orbeonServer == null) {
-			orbeonServer = DEFAULT_ORBEON_SERVER;
-		}
-
-		if (orbeonPort == null) {
-			orbeonPort = DEFAULT_ORBEON_PORT;
-		}
-
-		if (orbeonProtocol == null) {
-			orbeonProtocol = DEFAULT_ORBEON_PROTOCOL;
+			return getProperty(propertyId);
+		} catch (PropertyNotFoundException e) {
+			BiitCommonLogger.errorMessageNotification(OrbeonConfigurationReader.class, e);
+			return null;
 		}
 	}
 
 	public String getOrbeonServer() {
-		return orbeonServer;
+		return getPropertyLogException(ORBEON_SERVER_TAG);
 	}
 
 	public int getOrbeonPort() {
-		return orbeonPort;
+		try {
+			return Integer.parseInt(getPropertyLogException(ORBEON_SERVER_PORT));
+		} catch (Exception e) {
+			BiitCommonLogger.errorMessageNotification(OrbeonConfigurationReader.class, e);
+			return DEFAULT_ORBEON_PORT;
+		}
+
 	}
 
 	public String getOrbeonProtocol() {
-		return orbeonProtocol;
+		return getPropertyLogException(ORBEON_SERVER_PROTOCOL);
 	}
 
 }
