@@ -9,9 +9,9 @@ public class OrbeonConfigurationReader {
 	private final String DATABASE_CONFIG_FILE = "settings.conf";
 
 	// Liferay Profile
-	private final String ORBEON_SERVER_TAG = "orbeonServer";
-	private final String ORBEON_SERVER_PORT = "orbeonPort";
-	private final String ORBEON_SERVER_PROTOCOL = "orbeonProtocol";
+	private final String ORBEON_SERVER_TAG = "orbeon.server";
+	private final String ORBEON_SERVER_PORT = "orbeon.port";
+	private final String ORBEON_SERVER_PROTOCOL = "orbeon.protocol";
 
 	private final String DEFAULT_ORBEON_SERVER = "localhost";
 	private final int DEFAULT_ORBEON_PORT = 8080;
