@@ -20,6 +20,7 @@ import com.biit.form.submitted.ISubmittedForm;
 import com.biit.form.submitted.ISubmittedGroup;
 import com.biit.form.submitted.ISubmittedObject;
 import com.biit.form.submitted.ISubmittedQuestion;
+import com.biit.logger.BiitCommonLogger;
 import com.biit.orbeon.configuration.OrbeonConfigurationReader;
 
 /**
@@ -43,8 +44,8 @@ public abstract class OrbeonImporter {
 	 * @throws DocumentException
 	 * @throws UnsupportedEncodingException
 	 */
-	public ISubmittedForm readFormAnswers(String orbeonApplication, String orbeonFormName, String orbeonDocumentId) throws MalformedURLException,
-			DocumentException, UnsupportedEncodingException {
+	public ISubmittedForm readFormAnswers(String orbeonApplication, String orbeonFormName, String orbeonDocumentId)
+			throws MalformedURLException, DocumentException, UnsupportedEncodingException {
 		ISubmittedForm form = createForm(orbeonApplication, orbeonFormName);
 		readXml(getXml(orbeonApplication, orbeonFormName, orbeonDocumentId), form);
 		return form;
@@ -62,8 +63,8 @@ public abstract class OrbeonImporter {
 	 * @throws DocumentException
 	 * @throws UnsupportedEncodingException
 	 */
-	public ISubmittedForm readFormAnswers(ISubmittedForm form, String orbeonDocumentId) throws MalformedURLException, DocumentException,
-			UnsupportedEncodingException {
+	public ISubmittedForm readFormAnswers(ISubmittedForm form, String orbeonDocumentId)
+			throws MalformedURLException, DocumentException, UnsupportedEncodingException {
 		readXml(getXml(form.getApplicationName(), form.getName(), orbeonDocumentId), form);
 		return form;
 	}
@@ -86,8 +87,9 @@ public abstract class OrbeonImporter {
 	 * @throws DocumentException
 	 * @throws UnsupportedEncodingException
 	 */
-	public ISubmittedForm readFormAnswers(String protocol, String server, int port, String orbeonApplication, String orbeonFormName, String orbeonDocumentId)
-			throws MalformedURLException, DocumentException, UnsupportedEncodingException {
+	public ISubmittedForm readFormAnswers(String protocol, String server, int port, String orbeonApplication,
+			String orbeonFormName, String orbeonDocumentId)
+					throws MalformedURLException, DocumentException, UnsupportedEncodingException {
 		ISubmittedForm form = createForm(orbeonApplication, orbeonFormName);
 		readXml(getXml(protocol, server, port, orbeonApplication, orbeonFormName, orbeonDocumentId), form);
 		return form;
@@ -110,9 +112,12 @@ public abstract class OrbeonImporter {
 	 * @throws MalformedURLException
 	 * @throws DocumentException
 	 */
-	public static String getXml(String orbeonApplication, String orbeonFormName, String orbeonDocumentId) throws MalformedURLException, DocumentException {
-		return getXml(OrbeonConfigurationReader.getInstance().getOrbeonProtocol(), OrbeonConfigurationReader.getInstance().getOrbeonServer(),
-				OrbeonConfigurationReader.getInstance().getOrbeonPort(), orbeonApplication, orbeonFormName, orbeonDocumentId);
+	public static String getXml(String orbeonApplication, String orbeonFormName, String orbeonDocumentId)
+			throws MalformedURLException, DocumentException {
+		return getXml(OrbeonConfigurationReader.getInstance().getOrbeonProtocol(),
+				OrbeonConfigurationReader.getInstance().getOrbeonServer(),
+				OrbeonConfigurationReader.getInstance().getOrbeonPort(), orbeonApplication, orbeonFormName,
+				orbeonDocumentId);
 	}
 
 	/**
@@ -130,13 +135,14 @@ public abstract class OrbeonImporter {
 	 * @throws MalformedURLException
 	 * @throws DocumentException
 	 */
-	public static String getXml(String protocol, String server, int port, String orbeonApplication, String orbeonFormName, String orbeonDocumentId)
-			throws MalformedURLException, DocumentException {
+	public static String getXml(String protocol, String server, int port, String orbeonApplication,
+			String orbeonFormName, String orbeonDocumentId) throws MalformedURLException, DocumentException {
 		// Get the orbeon document structure
 		OrbeonQuestionAnalyzer.setXmlStructure(protocol, server, port, orbeonApplication, orbeonFormName);
 		// Get the submitted docuemnt
-		String xmlURL = protocol + "://" + server + ":" + port + "/orbeon/fr/service/persistence/crud/" + orbeonApplication + "/" + orbeonFormName + "/data/"
-				+ orbeonDocumentId + "/data.xml";
+		String xmlURL = protocol + "://" + server + ":" + port + "/orbeon/fr/service/persistence/crud/"
+				+ orbeonApplication + "/" + orbeonFormName + "/data/" + orbeonDocumentId + "/data.xml";
+		BiitCommonLogger.info(OrbeonImporter.class, "Accessing to: " + xmlURL);
 		SAXReader xmlReader = new SAXReader();
 
 		final Document xmlResponse = xmlReader.read(new URL(xmlURL));
@@ -198,7 +204,8 @@ public abstract class OrbeonImporter {
 				questionPath.add(xmlGroupOrQuestion.getName());
 				ISubmittedQuestion question = createQuestion(parent, xmlGroupOrQuestion.getName());
 				parent.addChild(question);
-				if (OrbeonQuestionAnalyzer.isStructureSet() && OrbeonQuestionAnalyzer.isQuestionMultiSelect(questionPath)) {
+				if (OrbeonQuestionAnalyzer.isStructureSet()
+						&& OrbeonQuestionAnalyzer.isQuestionMultiSelect(questionPath)) {
 					String[] answers = xmlGroupOrQuestion.getText().split(" ");
 					question.setAnswers(new HashSet<String>(Arrays.asList(answers)));
 				} else {

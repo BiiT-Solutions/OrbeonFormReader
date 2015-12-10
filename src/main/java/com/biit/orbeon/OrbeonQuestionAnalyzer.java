@@ -11,6 +11,8 @@ import org.dom4j.DocumentException;
 import org.dom4j.Node;
 import org.dom4j.io.SAXReader;
 
+import com.biit.logger.BiitCommonLogger;
+
 public class OrbeonQuestionAnalyzer {
 
 	private static Document orbeonFormStructureXml = null;
@@ -33,6 +35,7 @@ public class OrbeonQuestionAnalyzer {
 
 		String xmlURL = protocol + "://" + server + ":" + port + "/orbeon/fr/service/persistence/crud/"
 				+ orbeonApplication + "/" + orbeonFormName + "/form/form.xhtml";
+		BiitCommonLogger.debug(OrbeonQuestionAnalyzer.class, "Getting Orbeon Xml from '" + xmlURL + "'.");
 		SAXReader xmlReader = new SAXReader();
 		orbeonFormStructureXml = xmlReader.read(new URL(xmlURL));
 	}
@@ -55,7 +58,8 @@ public class OrbeonQuestionAnalyzer {
 				for (int i = 1; i < questionPath.size() - 1; i++) {
 					String groupName = questionPath.get(i);
 					resourceSection = resourceSection.selectSingleNode("//fr:section[@id='" + groupName + "-control']");
-					// Does not exist the group or category, do not try to search for a question.
+					// Does not exist the group or category, do not try to
+					// search for a question.
 					if (resourceSection == null) {
 						break;
 					}
