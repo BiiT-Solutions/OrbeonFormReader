@@ -34,6 +34,7 @@
 		<maven-antrun-plugin.version>1.7</maven-antrun-plugin.version>
 		<maven-surefire.version>2.14.1</maven-surefire.version>
 		<jaxen.version>1.1.6</jaxen.version>
+		<dom4j.version>1.6.1</dom4j.version>
 		<org.testng.version>6.8.8</org.testng.version>
 		<maven-resources-plugin.version>2.7</maven-resources-plugin.version>
 		<maven-release-plugin.version>2.5.1</maven-release-plugin.version>
@@ -49,7 +50,7 @@
 		<dependency>
 			<groupId>dom4j</groupId>
 			<artifactId>dom4j</artifactId>
-			<version>1.6.1</version>
+			<version>${dom4j.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>jaxen</groupId>
