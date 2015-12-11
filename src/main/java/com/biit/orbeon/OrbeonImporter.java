@@ -209,7 +209,7 @@ public abstract class OrbeonImporter {
 					String[] answers = xmlGroupOrQuestion.getText().split(" ");
 					question.setAnswers(new HashSet<String>(Arrays.asList(answers)));
 				} else {
-					question.setAnswer(xmlGroupOrQuestion.getText());
+					question.addAnswer(xmlGroupOrQuestion.getText());
 				}
 				questionPath.remove(questionPath.size() - 1);
 			}

@@ -4,7 +4,7 @@ import com.biit.logger.BiitCommonLogger;
 import com.biit.utils.configuration.ConfigurationReader;
 import com.biit.utils.configuration.PropertiesSourceFile;
 import com.biit.utils.configuration.SystemVariablePropertiesSourceFile;
-import com.biit.utils.configuration.exception.PropertyNotFoundException;
+import com.biit.utils.configuration.exceptions.PropertyNotFoundException;
 
 public class OrbeonConfigurationReader extends ConfigurationReader {
 	private final String CONFIG_FILE = "settings.conf";
