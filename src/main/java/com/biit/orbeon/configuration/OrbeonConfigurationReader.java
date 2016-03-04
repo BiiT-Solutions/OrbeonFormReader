@@ -14,10 +14,12 @@ public class OrbeonConfigurationReader extends ConfigurationReader {
 	private final String ORBEON_SERVER_TAG = "orbeon.server";
 	private final String ORBEON_SERVER_PORT = "orbeon.port";
 	private final String ORBEON_SERVER_PROTOCOL = "orbeon.protocol";
+	private final String ORBEON_LANGUAGE = "orbeon.language";
 
 	private final String DEFAULT_ORBEON_SERVER = "localhost";
 	private final int DEFAULT_ORBEON_PORT = 8080;
 	private final String DEFAULT_ORBEON_PROTOCOL = "http";
+	private final String DEFAULT_ORBEON_LANGUAGE = "en";
 
 	private static OrbeonConfigurationReader instance;
 
@@ -27,6 +29,7 @@ public class OrbeonConfigurationReader extends ConfigurationReader {
 		addProperty(ORBEON_SERVER_TAG, DEFAULT_ORBEON_SERVER);
 		addProperty(ORBEON_SERVER_PORT, DEFAULT_ORBEON_PORT);
 		addProperty(ORBEON_SERVER_PROTOCOL, DEFAULT_ORBEON_PROTOCOL);
+		addProperty(ORBEON_LANGUAGE, DEFAULT_ORBEON_LANGUAGE);
 
 		addPropertiesSource(new PropertiesSourceFile(CONFIG_FILE));
 		addPropertiesSource(new SystemVariablePropertiesSourceFile(SYSTEM_VARIABLE_CONFIG, CONFIG_FILE));
@@ -70,6 +73,10 @@ public class OrbeonConfigurationReader extends ConfigurationReader {
 
 	public String getOrbeonProtocol() {
 		return getPropertyLogException(ORBEON_SERVER_PROTOCOL);
+	}
+	
+	public String getOrbeonLanguage() {
+		return getPropertyLogException(ORBEON_LANGUAGE);
 	}
 
 }
