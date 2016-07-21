@@ -2,7 +2,6 @@ package com.biit.orbeon;
 
 import java.io.ByteArrayInputStream;
 import java.net.MalformedURLException;
-import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
 
@@ -10,8 +9,6 @@ import org.dom4j.Document;
 import org.dom4j.DocumentException;
 import org.dom4j.Node;
 import org.dom4j.io.SAXReader;
-
-import com.biit.logger.BiitCommonLogger;
 
 public class OrbeonQuestionAnalyzer {
 
@@ -30,14 +27,9 @@ public class OrbeonQuestionAnalyzer {
 	 * @throws MalformedURLException
 	 * @throws DocumentException
 	 */
-	public static void setXmlStructure(String protocol, String server, int port, String orbeonApplication,
-			String orbeonFormName) throws MalformedURLException, DocumentException {
-
-		String xmlURL = protocol + "://" + server + ":" + port + "/orbeon/fr/service/persistence/crud/"
-				+ orbeonApplication + "/" + orbeonFormName + "/form/form.xhtml";
-		BiitCommonLogger.debug(OrbeonQuestionAnalyzer.class, "Getting Orbeon Xml from '" + xmlURL + "'.");
-		SAXReader xmlReader = new SAXReader();
-		orbeonFormStructureXml = xmlReader.read(new URL(xmlURL));
+	public static void setXmlStructure(String protocol, String server, int port, String orbeonApplication, String orbeonFormName) throws MalformedURLException,
+			DocumentException {
+		orbeonFormStructureXml = OrbeonImporter.getFormDeclaration(protocol, server, port, orbeonApplication, orbeonFormName);
 	}
 
 	public static void setXmlStructure(String xmlText) throws DocumentException {
