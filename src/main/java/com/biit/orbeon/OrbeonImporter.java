@@ -152,6 +152,17 @@ public abstract class OrbeonImporter {
 		return null;
 	}
 
+	/**
+	 * Gets the XML that defines an Orbeon form. 
+	 * @param protocol http/https
+	 * @param server   server name or IP
+	 * @param port	   port of the server
+	 * @param orbeonApplication	Usually "WebForms"
+	 * @param orbeonFormName   The name of the form.
+	 * @return
+	 * @throws MalformedURLException
+	 * @throws DocumentException
+	 */
 	public static Document getFormDeclaration(String protocol, String server, int port, String orbeonApplication, String orbeonFormName)
 			throws MalformedURLException, DocumentException {
 		// Get the document structure
