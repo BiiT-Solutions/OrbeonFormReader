@@ -170,12 +170,18 @@ public abstract class OrbeonImporter {
 	}
 
 	/**
-	 * Gets the XML that defines an Orbeon form. 
-	 * @param protocol http/https
-	 * @param server   server name or IP
-	 * @param port	   port of the server
-	 * @param orbeonApplication	Usually "WebForms"
-	 * @param orbeonFormName   The name of the form.
+	 * Gets the XML that defines an Orbeon form.
+	 * 
+	 * @param protocol
+	 *            http/https
+	 * @param server
+	 *            server name or IP
+	 * @param port
+	 *            port of the server
+	 * @param orbeonApplication
+	 *            Usually "WebForms"
+	 * @param orbeonFormName
+	 *            The name of the form.
 	 * @return
 	 * @throws MalformedURLException
 	 * @throws DocumentException
@@ -201,6 +207,9 @@ public abstract class OrbeonImporter {
 	 */
 	@SuppressWarnings("rawtypes")
 	public void readXml(String xmlText, ISubmittedForm form) throws DocumentException, UnsupportedEncodingException {
+		if (xmlText == null) {
+			return;
+		}
 		SAXReader xmlReader = new SAXReader();
 		final Document xmlResponse = xmlReader.read(new ByteArrayInputStream(xmlText.getBytes("UTF-8")));
 		final Element formElement = xmlResponse.getRootElement();
