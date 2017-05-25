@@ -151,11 +151,15 @@ public abstract class OrbeonImporter {
 	public static String getXml(String protocol, String server, int port, String orbeonApplication, String orbeonFormName, String orbeonDocumentId)
 			throws MalformedURLException, DocumentException {
 		// Get the orbeon document structure
-		OrbeonQuestionAnalyzer.setXmlStructure(protocol, server, port, orbeonApplication, orbeonFormName);
+		Document formAsXml = getFormDeclaration(protocol, server, port, orbeonApplication, orbeonFormName);
+		if (formAsXml == null) {
+			throw new DocumentException("Orbeon form '" + orbeonFormName + "' is invalid.");
+		}
+		OrbeonQuestionAnalyzer.setXmlStructure(formAsXml.asXML());
 		// Get the submitted document
 		String xmlURL = protocol + "://" + server + ":" + port + "/orbeon/fr/service/persistence/crud/" + orbeonApplication + "/" + orbeonFormName + "/data/"
 				+ orbeonDocumentId + "/data.xml";
-		BiitCommonLogger.info(OrbeonImporter.class, "Accessing to: " + xmlURL);
+		BiitCommonLogger.debug(OrbeonImporter.class, "Accessing to: " + xmlURL);
 		SAXReader xmlReader = new SAXReader();
 
 		final Document xmlResponse = xmlReader.read(new URL(xmlURL));
@@ -163,6 +167,28 @@ public abstract class OrbeonImporter {
 			return xmlResponse.asXML();
 		}
 		return null;
+	}
+
+	/**
+	 * Gets the XML that defines an Orbeon form. 
+	 * @param protocol http/https
+	 * @param server   server name or IP
+	 * @param port	   port of the server
+	 * @param orbeonApplication	Usually "WebForms"
+	 * @param orbeonFormName   The name of the form.
+	 * @return
+	 * @throws MalformedURLException
+	 * @throws DocumentException
+	 */
+	public static Document getFormDeclaration(String protocol, String server, int port, String orbeonApplication, String orbeonFormName)
+			throws MalformedURLException, DocumentException {
+		// Get the document structure
+		String xmlURL = protocol + "://" + server + ":" + port + "/orbeon/fr/service/persistence/crud/" + orbeonApplication + "/" + orbeonFormName
+				+ "/form/form.xhtml";
+		BiitCommonLogger.debug(OrbeonImporter.class, "Accessing to: " + xmlURL);
+		SAXReader xmlReader = new SAXReader();
+
+		return xmlReader.read(new URL(xmlURL));
 	}
 
 	/**

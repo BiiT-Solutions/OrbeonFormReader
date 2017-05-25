@@ -6,25 +6,25 @@
 	<groupId>com.biit</groupId>
 	<artifactId>orbeon-form-reader</artifactId>
 	<packaging>jar</packaging>
-	<version>0.7.8-SNAPSHOT</version>
+	<version>0.7.14-SNAPSHOT</version>
 	<name>Orbeon Form Reader</name>
 
 	<distributionManagement>
 		<repository>
 			<id>central</id>
 			<name>biit-releases</name>
-			<url>https://dev.biit-solutions.com:8443/mavenartifactory/ext-release-local</url>
+			<url>https://git.biit-solutions.com:8443/artifactory/ext-release-local</url>
 		</repository>
 		<snapshotRepository>
 			<id>snapshots</id>
 			<name>libs-snapshot</name>
-			<url>https://dev.biit-solutions.com:8443/mavenartifactory/libs-snapshot</url>
+			<url>https://git.biit-solutions.com:8443/artifactory/libs-snapshot</url>
 		</snapshotRepository>
 	</distributionManagement>
 
 	<scm>
-		<connection>scm:git:dev.biit-solutions.com:OrbeonFormsReader.git</connection>
-		<developerConnection>scm:git:dev.biit-solutions.com:OrbeonFormsReader.git</developerConnection>
+		<connection>scm:git:git.biit-solutions.com:OrbeonFormsReader.git</connection>
+		<developerConnection>scm:git:git.biit-solutions.com:OrbeonFormsReader.git</developerConnection>
 		<tag>orbeon-form-reader</tag>
 	</scm>
 
