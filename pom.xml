@@ -6,7 +6,7 @@
 	<groupId>com.biit</groupId>
 	<artifactId>orbeon-form-reader</artifactId>
 	<packaging>jar</packaging>
-	<version>0.7.14-SNAPSHOT</version>
+	<version>0.8.1-SNAPSHOT</version>
 	<name>Orbeon Form Reader</name>
 
 	<distributionManagement>
@@ -42,7 +42,7 @@
 		<project.scm.id>git</project.scm.id>
 		<!-- BiiT dependencies -->
 		<biit-common-utils.version>[0.4,0.5)</biit-common-utils.version>
-		<biit-form-submitted.version>[0.2,0.3)</biit-form-submitted.version>
+		<biit-form-submitted.version>[0.3,0.4)</biit-form-submitted.version>
 	</properties>
 
 	<dependencies>
