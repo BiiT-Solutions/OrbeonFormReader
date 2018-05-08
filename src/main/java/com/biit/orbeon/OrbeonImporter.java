@@ -89,8 +89,25 @@ public abstract class OrbeonImporter {
 	 */
 	public ISubmittedForm readFormAnswers(String protocol, String server, int port, String orbeonApplication, String orbeonFormName, String orbeonDocumentId)
 			throws MalformedURLException, DocumentException, UnsupportedEncodingException {
+		return getFormFromXml(getXml(protocol, server, port, orbeonApplication, orbeonFormName, orbeonDocumentId), orbeonApplication, orbeonFormName);
+	}
+
+	/**
+	 * Read the form answers of an orbeon form.
+	 * 
+	 * @param xml
+	 *            xmls content from orbeon server.
+	 * @param orbeonApplication
+	 *            application name of the form.
+	 * @param orbeonFormName
+	 *            name of the form.
+	 * @return a form structured as a Submitted Form.
+	 * @throws UnsupportedEncodingException
+	 * @throws DocumentException
+	 */
+	public ISubmittedForm getFormFromXml(String xml, String orbeonApplication, String orbeonFormName) throws UnsupportedEncodingException, DocumentException {
 		ISubmittedForm form = createForm(orbeonApplication, orbeonFormName);
-		readXml(getXml(protocol, server, port, orbeonApplication, orbeonFormName, orbeonDocumentId), form);
+		readXml(xml, form);
 		return form;
 	}
 
@@ -153,12 +170,18 @@ public abstract class OrbeonImporter {
 	}
 
 	/**
-	 * Gets the XML that defines an Orbeon form. 
-	 * @param protocol http/https
-	 * @param server   server name or IP
-	 * @param port	   port of the server
-	 * @param orbeonApplication	Usually "WebForms"
-	 * @param orbeonFormName   The name of the form.
+	 * Gets the XML that defines an Orbeon form.
+	 * 
+	 * @param protocol
+	 *            http/https
+	 * @param server
+	 *            server name or IP
+	 * @param port
+	 *            port of the server
+	 * @param orbeonApplication
+	 *            Usually "WebForms"
+	 * @param orbeonFormName
+	 *            The name of the form.
 	 * @return
 	 * @throws MalformedURLException
 	 * @throws DocumentException
@@ -184,6 +207,9 @@ public abstract class OrbeonImporter {
 	 */
 	@SuppressWarnings("rawtypes")
 	public void readXml(String xmlText, ISubmittedForm form) throws DocumentException, UnsupportedEncodingException {
+		if (xmlText == null) {
+			return;
+		}
 		SAXReader xmlReader = new SAXReader();
 		final Document xmlResponse = xmlReader.read(new ByteArrayInputStream(xmlText.getBytes("UTF-8")));
 		final Element formElement = xmlResponse.getRootElement();
