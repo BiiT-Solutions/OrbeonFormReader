@@ -41,7 +41,7 @@
 		<maven-scm-provider-gitexe.version>1.9.2</maven-scm-provider-gitexe.version>
 		<project.scm.id>git</project.scm.id>
 		<!-- BiiT dependencies -->
-		<biit-common-utils.version>[0.4,0.5)</biit-common-utils.version>
+		<biit-common-utils.version>[1.0,1.1)</biit-common-utils.version>
 		<biit-form-submitted.version>[0.3,0.4)</biit-form-submitted.version>
 	</properties>
 
