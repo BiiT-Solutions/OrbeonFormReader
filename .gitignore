@@ -9,7 +9,8 @@ output.log
 tmp
 *.zip
 *.xls#
-
+.idea
+*.iml
 
 
 /dhszw-form-zrm/src/test/resources/META-INF
