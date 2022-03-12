@@ -1,20 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 
 
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.biit</groupId>
     <artifactId>orbeon-form-reader</artifactId>
     <packaging>jar</packaging>
-    <version>1.0.3-SNAPSHOT</version>
+    <version>1.0.3</version>
     <name>Orbeon Form Reader</name>
 
     <parent>
         <groupId>com.biit</groupId>
         <artifactId>versions</artifactId>
         <version>[0.1,0.2)</version>
-        <relativePath/> <!-- lookup parent from repository -->
+        <relativePath /> <!-- lookup parent from repository -->
     </parent>
 
     <distributionManagement>
@@ -33,7 +32,7 @@
     <scm>
         <connection>scm:git:git.biit-solutions.com:BiiT/OrbeonFormsReader.git</connection>
         <developerConnection>scm:git:git.biit-solutions.com:BiiT/OrbeonFormsReader.git</developerConnection>
-        <tag>orbeon-form-reader</tag>
+        <tag>orbeon-form-reader-1.0.3</tag>
     </scm>
 
     <dependencies>
