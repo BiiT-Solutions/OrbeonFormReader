@@ -1,129 +1,115 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 
 
-	<modelVersion>4.0.0</modelVersion>
-	<groupId>com.biit</groupId>
-	<artifactId>orbeon-form-reader</artifactId>
-	<packaging>jar</packaging>
-	<version>1.0.3-SNAPSHOT</version>
-	<name>Orbeon Form Reader</name>
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>com.biit</groupId>
+    <artifactId>orbeon-form-reader</artifactId>
+    <packaging>jar</packaging>
+    <version>1.0.3-SNAPSHOT</version>
+    <name>Orbeon Form Reader</name>
 
-	<distributionManagement>
-		<repository>
-			<id>central</id>
-			<name>libs-releases</name>
-			<url>https://artifactory.biit-solutions.com/artifactory/libs-release</url>
-		</repository>
-		<snapshotRepository>
-			<id>snapshots</id>
-			<name>libs-snapshot</name>
-			<url>https://artifactory.biit-solutions.com/artifactory/libs-snapshot</url>
-		</snapshotRepository>
-	</distributionManagement>
+    <parent>
+        <groupId>com.biit</groupId>
+        <artifactId>versions</artifactId>
+        <version>[0.1,0.2)</version>
+        <relativePath/> <!-- lookup parent from repository -->
+    </parent>
 
-	<scm>
-		<connection>scm:git:git.biit-solutions.com:BiiT/OrbeonFormsReader.git</connection>
-		<developerConnection>scm:git:git.biit-solutions.com:BiiT/OrbeonFormsReader.git</developerConnection>
-		<tag>orbeon-form-reader</tag>
-	</scm>
+    <distributionManagement>
+        <repository>
+            <id>central</id>
+            <name>libs-releases</name>
+            <url>https://artifactory.biit-solutions.com/artifactory/libs-release</url>
+        </repository>
+        <snapshotRepository>
+            <id>snapshots</id>
+            <name>libs-snapshot</name>
+            <url>https://artifactory.biit-solutions.com/artifactory/libs-snapshot</url>
+        </snapshotRepository>
+    </distributionManagement>
 
-	<properties>
-		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<maven-compiler-plugin.version>3.1</maven-compiler-plugin.version>
-		<maven-antrun-plugin.version>1.7</maven-antrun-plugin.version>
-		<maven-surefire.version>2.14.1</maven-surefire.version>
-		<jaxen.version>1.1.6</jaxen.version>
-		<dom4j.version>1.6.1</dom4j.version>
-		<org.testng.version>6.8.8</org.testng.version>
-		<maven-resources-plugin.version>2.7</maven-resources-plugin.version>
-		<maven-release-plugin.version>2.5.1</maven-release-plugin.version>
-		<maven-scm-provider-gitexe.version>1.9.2</maven-scm-provider-gitexe.version>
-		<project.scm.id>git</project.scm.id>
-		<!-- BiiT dependencies -->
-		<biit-common-utils.version>[1.1,1.2)</biit-common-utils.version>
-		<biit-form-submitted.version>[1.0,1.1)</biit-form-submitted.version>
-	</properties>
+    <scm>
+        <connection>scm:git:git.biit-solutions.com:BiiT/OrbeonFormsReader.git</connection>
+        <developerConnection>scm:git:git.biit-solutions.com:BiiT/OrbeonFormsReader.git</developerConnection>
+        <tag>orbeon-form-reader</tag>
+    </scm>
 
-	<dependencies>
-		<!-- For reading XML -->
-		<dependency>
-			<groupId>dom4j</groupId>
-			<artifactId>dom4j</artifactId>
-			<version>${dom4j.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>jaxen</groupId>
-			<artifactId>jaxen</artifactId>
-			<version>${jaxen.version}</version>
-		</dependency>
-		<!-- File access -->
-		<dependency>
-			<groupId>com.biit</groupId>
-			<artifactId>common-utils</artifactId>
-			<version>${biit-common-utils.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>com.biit</groupId>
-			<artifactId>form-structure-submitted</artifactId>
-			<version>${biit-form-submitted.version}</version>
-		</dependency>
-		<!-- Testing -->
-		<dependency>
-			<groupId>org.testng</groupId>
-			<artifactId>testng</artifactId>
-			<version>${org.testng.version}</version>
-			<scope>test</scope>
-		</dependency>
-	</dependencies>
+    <dependencies>
+        <!-- For reading XML -->
+        <dependency>
+            <groupId>dom4j</groupId>
+            <artifactId>dom4j</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>jaxen</groupId>
+            <artifactId>jaxen</artifactId>
+        </dependency>
+        <!-- File access -->
+        <dependency>
+            <groupId>com.biit</groupId>
+            <artifactId>common-utils</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.biit</groupId>
+            <artifactId>form-structure-submitted</artifactId>
+        </dependency>
+        <!-- Testing -->
+        <dependency>
+            <groupId>org.testng</groupId>
+            <artifactId>testng</artifactId>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
 
-	<build>
-		<plugins>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-compiler-plugin</artifactId>
-				<version>${maven-compiler-plugin.version}</version>
-				<configuration>
-					<source>7</source>
-					<target>7</target>
-				</configuration>
-			</plugin>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-surefire-plugin</artifactId>
-				<version>${maven-surefire.version}</version>
-				<configuration>
-					<useFile>false</useFile>
-					<trimStackTrace>false</trimStackTrace>
-					<suiteXmlFiles>
-						<suiteXmlFile>src/test/config/testng.xml</suiteXmlFile>
-					</suiteXmlFiles>
-					<useSystemClassLoader>false</useSystemClassLoader>
-				</configuration>
-			</plugin>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-resources-plugin</artifactId>
-				<version>${maven-resources-plugin.version}</version>
-			</plugin>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-release-plugin</artifactId>
-				<version>${maven-release-plugin.version}</version>
-				<dependencies>
-					<dependency>
-						<groupId>org.apache.maven.scm</groupId>
-						<artifactId>maven-scm-provider-gitexe</artifactId>
-						<version>${maven-scm-provider-gitexe.version}</version>
-					</dependency>
-				</dependencies>
-				<configuration>
-					<checkModificationExcludes>
-						<checkModificationExclude>pom.xml</checkModificationExclude>
-					</checkModificationExcludes>
-				</configuration>
-			</plugin>
-		</plugins>
-	</build>
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>${maven-compiler-plugin.version}</version>
+                <configuration>
+                    <source>${java.jdk.version}</source>
+                    <target>${java.jdk.version}</target>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>${maven-surefire.version}</version>
+                <configuration>
+                    <useFile>false</useFile>
+                    <trimStackTrace>false</trimStackTrace>
+                    <suiteXmlFiles>
+                        <suiteXmlFile>src/test/resources/testng.xml</suiteXmlFile>
+                    </suiteXmlFiles>
+                    <useSystemClassLoader>false</useSystemClassLoader>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-resources-plugin</artifactId>
+                <version>${maven-resources-plugin.version}</version>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-release-plugin</artifactId>
+                <version>${maven-release-plugin.version}</version>
+                <dependencies>
+                    <dependency>
+                        <groupId>org.apache.maven.scm</groupId>
+                        <artifactId>maven-scm-provider-gitexe</artifactId>
+                        <version>${maven-scm-provider-gitexe.version}</version>
+                    </dependency>
+                </dependencies>
+                <configuration>
+                    <checkModificationExcludes>
+                        <checkModificationExclude>pom.xml</checkModificationExclude>
+                    </checkModificationExcludes>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
 
 </project>
