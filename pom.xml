@@ -5,7 +5,7 @@
     <groupId>com.biit</groupId>
     <artifactId>orbeon-form-reader</artifactId>
     <packaging>jar</packaging>
-    <version>1.1.18-SNAPSHOT</version>
+    <version>1.1.18</version>
     <name>Orbeon Form Reader</name>
 
     <parent>
@@ -31,7 +31,7 @@
     <scm>
         <connection>scm:git:git.biit-solutions.com:BiiT/OrbeonFormsReader.git</connection>
         <developerConnection>scm:git:git.biit-solutions.com:BiiT/OrbeonFormsReader.git</developerConnection>
-        <tag>orbeon-form-reader</tag>
+        <tag>orbeon-form-reader-1.1.18</tag>
     </scm>
 
     <dependencies>
